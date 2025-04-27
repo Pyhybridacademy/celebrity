@@ -1,0 +1,98 @@
+<!-- templates/admin_panel/celebrity_list.html -->
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Manage Celebrities - Admin Panel{% endblock %}
+{% block header_title %}Manage Celebrities{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h2 class="text-xl font-semibold text-gray-800">All Celebrities</h2>
+        <p class="text-gray-600">Manage your celebrity profiles</p>
+    </div>
+    <a href="{% url 'admin_add_celebrity' %}" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition">
+        Add New Celebrity
+    </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="p-4 border-b border-gray-200">
+        <div class="flex justify-between items-center">
+            <input type="text" id="search-celebrity" placeholder="Search celebrities..." class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+        </div>
+    </div>
+    
+    {% if celebrities %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hourly Rate</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for celebrity in celebrities %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            {% if celebrity.image %}
+                            <img src="{{ celebrity.image.url }}" alt="{{ celebrity.name }}" class="w-full h-full object-cover">
+                            {% else %}
+                            <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">No img</div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">{{ celebrity.name }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${{ celebrity.hourly_rate }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if celebrity.available %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                            {% if celebrity.available %}Available{% else %}Unavailable{% endif %}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ celebrity.created_at|date:"M d, Y" }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <a href="{% url 'admin_edit_celebrity' celebrity.id %}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                        <a href="{% url 'admin_delete_celebrity' celebrity.id %}" class="text-red-600 hover:text-red-900">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="p-6 text-center">
+        <p class="text-gray-500">No celebrities found. Click "Add New Celebrity" to create one.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+    // Simple search functionality
+    document.getElementById('search-celebrity').addEventListener('keyup', function() {
+        const searchValue = this.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            if (name.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

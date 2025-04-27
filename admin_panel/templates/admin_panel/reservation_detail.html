@@ -1,0 +1,138 @@
+<!-- templates/admin_panel/reservation_detail.html -->
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Reservation Details - Admin Panel{% endblock %}
+{% block header_title %}Reservation Details{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <a href="{% url 'admin_reservation_list' %}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Reservations
+    </a>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="md:col-span-2">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Reservation #{{ reservation.id }}</h2>
+                        <p class="text-gray-600">Created on {{ reservation.created_at|date:"F d, Y" }} at {{ reservation.created_at|time:"H:i" }}</p>
+                    </div>
+                    <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
+                        {% if reservation.status == 'confirmed' %}
+                            bg-green-100 text-green-800
+                        {% elif reservation.status == 'pending' %}
+                            bg-yellow-100 text-yellow-800
+                        {% else %}
+                            bg-red-100 text-red-800
+                        {% endif %}">
+                        {{ reservation.status|title }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Customer Information</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-sm text-gray-500">Name</p>
+                                <p class="font-medium">{{ reservation.user_name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Email</p>
+                                <p class="font-medium">{{ reservation.user_email }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Phone</p>
+                                <p class="font-medium">{{ reservation.phone_number }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Booking Details</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-sm text-gray-500">Celebrity</p>
+                                <p class="font-medium">{{ reservation.celebrity.name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Date</p>
+                                <p class="font-medium">{{ reservation.booking_date }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Time</p>
+                                <p class="font-medium">{{ reservation.booking_time }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Duration</p>
+                                <p class="font-medium">{{ reservation.duration_hours }} hour{{ reservation.duration_hours|pluralize }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Total Cost</p>
+                                <p class="font-medium text-purple-600">${{ reservation.total_cost }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if reservation.message %}
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Customer Message</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700">{{ reservation.message }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">Update Status</h3>
+            </div>
+            
+            <div class="p-6">
+                <form method="post" action="{% url 'admin_update_reservation_status' reservation.id %}">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Reservation Status</label>
+                        <select name="status" id="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <option value="pending" {% if reservation.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="confirmed" {% if reservation.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                            <option value="cancelled" {% if reservation.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition">
+                        Update Status
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800">Actions</h3>
+            </div>
+            
+            <div class="p-6">
+                <div class="space-y-3">
+                    <a href="{% url 'admin_send_email_to_reservation' reservation.id %}" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-medium py-2 px-4 rounded-lg transition">
+                        Send Email to Customer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

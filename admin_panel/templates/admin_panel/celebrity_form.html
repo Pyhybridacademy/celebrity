@@ -1,0 +1,105 @@
+<!-- templates/admin_panel/celebrity_form.html -->
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}{{ action }} Celebrity - Admin Panel{% endblock %}
+{% block header_title %}{{ action }} Celebrity{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <a href="{% url 'admin_celebrity_list' %}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Celebrity List
+    </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="p-6 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-800">{{ action }} Celebrity</h2>
+        <p class="text-gray-600">Fill in the details below</p>
+    </div>
+    
+    <div class="p-6">
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.bio.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Biography</label>
+                {{ form.bio }}
+                {% if form.bio.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.bio.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                {% if celebrity.image %}
+                <div class="mb-2">
+                    <img src="{{ celebrity.image.url }}" alt="{{ celebrity.name }}" class="w-32 h-32 object-cover rounded-lg">
+                    <p class="text-sm text-gray-500 mt-1">Current image. Upload a new one to replace it.</p>
+                </div>
+                {% endif %}
+                {{ form.image }}
+                {% if form.image.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.image.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.hourly_rate.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Hourly Rate ($)</label>
+                {{ form.hourly_rate }}
+                {% if form.hourly_rate.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.hourly_rate.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <div class="flex items-center">
+                    {{ form.available }}
+                    <label for="{{ form.available.id_for_label }}" class="ml-2 block text-sm text-gray-900">Available for booking</label>
+                </div>
+                {% if form.available.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.available.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="pt-4 border-t border-gray-200 flex justify-end">
+                <a href="{% url 'admin_celebrity_list' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg mr-2">
+                    Cancel
+                </a>
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg">
+                    {% if action == 'Add' %}Create Celebrity{% else %}Update Celebrity{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Style form elements with Tailwind classes
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.getElementById('{{ form.name.id_for_label }}');
+        const bioTextarea = document.getElementById('{{ form.bio.id_for_label }}');
+        const hourlyRateInput = document.getElementById('{{ form.hourly_rate.id_for_label }}');
+        
+        // Add Tailwind classes to form elements
+        nameInput.classList.add('w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-purple-500', 'focus:border-transparent');
+        
+        bioTextarea.classList.add('w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-purple-500', 'focus:border-transparent');
+        bioTextarea.rows = 5;
+        
+        hourlyRateInput.classList.add('w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-purple-500', 'focus:border-transparent');
+    });
+</script>
+{% endblock %}

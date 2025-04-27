@@ -1,0 +1,138 @@
+<!-- templates/admin_panel/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel - Celebrity Meet & Greet{% endblock %}</title>
+    {% load static %}
+    {% load compress %}
+    
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% endcompress %}
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white fixed inset-y-0 left-0 z-10 transform md:translate-x-0 transition duration-200 ease-in-out" id="sidebar">
+        <div class="flex items-center justify-between p-4 border-b border-gray-700">
+            <h1 class="text-xl font-bold">Admin Panel</h1>
+            <button id="close-sidebar" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <nav class="mt-4">
+            <a href="{% url 'admin_dashboard' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 {% if request.path == '/admin/' %}bg-gray-700{% endif %}">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Dashboard
+                </div>
+            </a>
+            
+            <a href="{% url 'admin_celebrity_list' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 {% if '/admin/celebrities/' in request.path %}bg-gray-700{% endif %}">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Celebrities
+                </div>
+            </a>
+            
+            <a href="{% url 'admin_reservation_list' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 {% if '/admin/reservations/' in request.path %}bg-gray-700{% endif %}">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Reservations
+                </div>
+            </a>
+            
+            <a href="{% url 'admin_send_email' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 {% if '/admin/send-email/' in request.path %}bg-gray-700{% endif %}">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Send Email
+                </div>
+            </a>
+            
+            <div class="mt-8 px-4">
+                <a href="{% url 'admin_logout' %}" class="block py-2 px-4 bg-red-600 hover:bg-red-700 rounded text-center transition">
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </aside>
+    
+    <!-- Main content -->
+    <div class="flex-1 md:ml-64">
+        <!-- Top bar -->
+        <header class="bg-white shadow-md py-4 px-6 flex items-center justify-between">
+            <div class="flex items-center">
+                <button id="open-sidebar" class="md:hidden mr-4 text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <h2 class="text-xl font-semibold text-gray-800">{% block header_title %}Admin Panel{% endblock %}</h2>
+            </div>
+            
+            <div class="flex items-center">
+                <a href="{% url 'home' %}" target="_blank" class="text-gray-600 hover:text-gray-800 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>
+                <span class="text-gray-600">{{ user.username }}</span>
+            </div>
+        </header>
+        
+        <!-- Messages -->
+        {% if messages %}
+        <div class="px-6 mt-4">
+            {% for message in messages %}
+            <div class="{% if message.tags == 'success' %}bg-green-100 border-green-500 text-green-700{% elif message.tags == 'error' %}bg-red-100 border-red-500 text-red-700{% else %}bg-blue-100 border-blue-500 text-blue-700{% endif %} border-l-4 p-4 mb-4 rounded">
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Content -->
+        <main class="p-6">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    
+    <script>
+        // Mobile sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('open-sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+        
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+        });
+        
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth < 768 && !sidebar.contains(e.target) && e.target !== openSidebarBtn) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!-- templates/admin_panel/send_email.html -->
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Send Email - Admin Panel{% endblock %}
+{% block header_title %}Send Email{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    {% if reservation %}
+    <a href="{% url 'admin_reservation_detail' reservation.id %}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Reservation Details
+    </a>
+    {% else %}
+    <a href="{% url 'admin_dashboard' %}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Dashboard
+    </a>
+    {% endif %}
+</div>
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="p-6 border-b border-gray-200">
+        <h2 class="text-xl font-semibold text-gray-800">Send Email</h2>
+        <p class="text-gray-600">
+            {% if reservation %}
+            Send an email to {{ reservation.user_name }} regarding their booking
+            {% else %}
+            Send an email to a customer
+            {% endif %}
+        </p>
+    </div>
+    
+    <div class="p-6">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="{{ form.recipient_email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Recipient Email</label>
+                {{ form.recipient_email }}
+                {% if form.recipient_email.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.recipient_email.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.subject.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                {{ form.subject }}
+                {% if form.subject.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.subject.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.message.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                {{ form.message }}
+                {% if form.message.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.message.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="pt-4 border-t border-gray-200 flex justify-end">
+                {% if reservation %}
+                <a href="{% url 'admin_reservation_detail' reservation.id %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg mr-2">
+                    Cancel
+                </a>
+                {% else %}
+                <a href="{% url 'admin_dashboard' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg mr-2">
+                    Cancel
+                </a>
+                {% endif %}
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg">
+                    Send Email
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Style form elements with Tailwind classes
+    document.addEventListener('DOMContentLoaded', function() {
+        const recipientInput = document.getElementById('{{ form.recipient_email.id_for_label }}');
+        const subjectInput = document.getElementById('{{ form.subject.id_for_label }}');
+        const messageTextarea = document.getElementById('{{ form.message.id_for_label }}');
+        
+        // Add Tailwind classes to form elements
+        recipientInput.classList.add('w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-purple-500', 'focus:border-transparent');
+        
+        subjectInput.classList.add('w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-purple-500', 'focus:border-transparent');
+        
+        messageTextarea.classList.add('w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-purple-500', 'focus:border-transparent');
+        messageTextarea.rows = 8;
+    });
+</script>
+{% endblock %}
+{% endblock %}
