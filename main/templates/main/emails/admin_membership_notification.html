@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Membership Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .membership-details {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .membership-details p {
+            margin: 8px 0;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4f46e5;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .alert {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>New Membership Application</h1>
+    </div>
+    
+    <div class="content">
+        <p>A new membership application has been submitted and requires your review.</p>
+        
+        <div class="membership-details">
+            <h3>Applicant Information:</h3>
+            <p><strong>Name:</strong> {{ membership.full_name }}</p>
+            <p><strong>Email:</strong> {{ membership.email }}</p>
+            <p><strong>Phone:</strong> {{ membership.phone_number }}</p>
+            <p><strong>Address:</strong> {{ membership.address }}</p>
+            
+            <h3>Membership Details:</h3>
+            <p><strong>Tier:</strong> {{ membership.tier.name }}</p>
+            <p><strong>Price:</strong> ${{ membership.tier.price }}</p>
+            <p><strong>Application Date:</strong> {{ membership.created_at|date:"F j, Y" }}</p>
+            <p><strong>Payment Method:</strong> {{ membership.get_payment_method_display }}</p>
+            <p><strong>Payment Details:</strong> {{ membership.payment_details }}</p>
+        </div>
+        
+        <div class="alert">
+            <p>Please review this application and verify the payment details before approving or rejecting.</p>
+        </div>
+        
+        <a href="{{ admin_url }}/memberships/{{ membership.id }}/" class="button">Review Application</a>
+    </div>
+    
+    <div class="footer">
+        <p>© {% now "Y" %} Celebrity Meet & Greet Admin System</p>
+    </div>
+</body>
+</html>

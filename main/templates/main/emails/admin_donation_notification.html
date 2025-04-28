@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donation Received</title>
+    <title>New Donation Received</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,10 +18,6 @@
             padding-bottom: 20px;
             border-bottom: 2px solid #f0f0f0;
             margin-bottom: 20px;
-        }
-        .logo {
-            max-width: 150px;
-            height: auto;
         }
         .content {
             padding: 20px 0;
@@ -43,58 +39,65 @@
             font-size: 12px;
             color: #777;
         }
-        .thank-you {
-            font-size: 18px;
-            color: #4f46e5;
+        .button {
+            display: inline-block;
+            background-color: #4f46e5;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .alert {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 10px 15px;
+            margin: 20px 0;
+        }
+        .amount {
+            font-size: 24px;
+            color: #047857;
             font-weight: bold;
-            text-align: center;
-            margin: 25px 0;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="{{ site_url }}{% if logo %}{{ logo.url }}{% else %}static/images/logo.png{% endif %}" alt="Celebrity Meet & Greet" class="logo">
-        <h1>Thank You for Your Donation!</h1>
+        <h1>New Donation Received</h1>
     </div>
     
     <div class="content">
-        <p>Dear {{ donation.donor_name }},</p>
+        <p>A new donation has been submitted and requires verification.</p>
         
-        <p>Thank you for your generous donation to {{ donation.charity.name }}. Your support makes a real difference!</p>
-        
-        <div class="thank-you">
-            Your donation of ${{ donation.amount }} has been received.
-        </div>
+        <p>Donation amount: <span class="amount">${{ donation.amount }}</span> to <strong>{{ donation.charity.name }}</strong></p>
         
         <div class="donation-details">
+            <h3>Donor Information:</h3>
+            <p><strong>Name:</strong> {{ donation.donor_name }}</p>
+            <p><strong>Email:</strong> {{ donation.email }}</p>
+            <p><strong>Anonymous:</strong> {% if donation.anonymous %}Yes{% else %}No{% endif %}</p>
+            
             <h3>Donation Details:</h3>
             <p><strong>Charity:</strong> {{ donation.charity.name }}</p>
-            <p><strong>Amount:</strong> ${{ donation.amount }}</p>
             <p><strong>Date:</strong> {{ donation.created_at|date:"F j, Y" }}</p>
             <p><strong>Payment Method:</strong> {{ donation.get_payment_method_display }}</p>
+            <p><strong>Payment Details:</strong> {{ donation.payment_details }}</p>
+            
             {% if donation.message %}
-            <p><strong>Your Message:</strong> "{{ donation.message }}"</p>
+            <h3>Donor Message:</h3>
+            <p>"{{ donation.message }}"</p>
             {% endif %}
         </div>
         
-        <p>Our team will verify your payment details. You will receive another email once your donation has been verified.</p>
+        <div class="alert">
+            <p>Please review this donation and verify the payment details before approving or rejecting.</p>
+        </div>
         
-        <p>Here's how your donation will help:</p>
-        <p>{{ donation.charity.description }}</p>
-        
-        <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
-        
-        <p>With gratitude,<br>
-        The Celebrity Meet & Greet Team</p>
+        <a href="{{ admin_url }}/donations/{{ donation.id }}/" class="button">Review Donation</a>
     </div>
     
     <div class="footer">
-        <p>© {% now "Y" %} Celebrity Meet & Greet. All rights reserved.</p>
-        <p>This email was sent to {{ donation.email }}</p>
-        {% if donation.anonymous %}
-        <p>Your donation will be listed as anonymous on our website as requested.</p>
-        {% endif %}
+        <p>© {% now "Y" %} Celebrity Meet & Greet Admin System</p>
     </div>
 </body>
 </html>
