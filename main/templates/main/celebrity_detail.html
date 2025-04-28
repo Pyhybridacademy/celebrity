@@ -49,7 +49,7 @@
     
     .hover-lift:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     }
     
     /* Fix for horizontal scrollbar */
@@ -70,7 +70,7 @@
     }
     
     .calendar-day:hover:not(.calendar-day-disabled) {
-        background-color: #f3e8ff;
+        background-color: rgba(168, 85, 247, 0.2);
         border-color: #a855f7;
     }
     
@@ -84,20 +84,33 @@
         opacity: 0.3;
         cursor: not-allowed;
     }
+    
+    /* Button styles */
+    .btn-primary {
+        @apply relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-primary-600 to-primary-700 p-0.5 text-sm font-medium text-white hover:text-white focus:outline-none focus:ring-4 focus:ring-primary-500;
+    }
+    
+    .btn-primary span {
+        @apply relative rounded-full bg-dark-700 px-8 py-3.5 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-white font-semibold text-lg;
+    }
+    
+    .btn-outline {
+        @apply inline-flex items-center justify-center px-8 py-3.5 border-2 border-primary-600 text-primary-400 hover:bg-dark-600 rounded-full font-semibold text-lg transition-colors;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="overflow-x-hidden">
     <!-- Hero Section -->
-    <section class="relative py-12 bg-gradient-to-b from-purple-50 to-white">
+    <section class="relative py-12 bg-dark-900">
         <!-- Background decorative elements - fixed to prevent overflow -->
-        <div class="decorative-blob top-0 right-0 w-64 h-64 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
-        <div class="decorative-blob bottom-0 left-0 w-64 h-64 bg-indigo-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+        <div class="decorative-blob top-0 right-0 w-64 h-64 bg-primary-900 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+        <div class="decorative-blob bottom-0 left-0 w-64 h-64 bg-accent-900 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
         
         <div class="container mx-auto px-6">
             <div class="mb-8 animate-fade-in">
-                <a href="{% url 'home' %}" class="inline-flex items-center text-purple-600 hover:text-purple-800 font-medium">
+                <a href="{% url 'celebrity_list' %}" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
@@ -105,18 +118,20 @@
                 </a>
             </div>
             
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-dark-800 rounded-2xl shadow-xl overflow-hidden">
                 <div class="md:flex">
                     <div class="md:w-1/2 lg:w-2/5 animate-slide-left">
                         <div class="relative h-96 md:h-full">
                             {% if celebrity.image %}
                             <img src="{{ celebrity.image.url }}" alt="{{ celebrity.name }}" class="w-full h-full object-cover">
                             {% else %}
-                            <img src="https://via.placeholder.com/600x800?text=No+Image" alt="{{ celebrity.name }}" class="w-full h-full object-cover">
+                            <div class="w-full h-full bg-dark-700 flex items-center justify-center">
+                                <span class="text-4xl font-bold text-gray-500">{{ celebrity.name|first }}</span>
+                            </div>
                             {% endif %}
                             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 md:hidden">
                                 <h1 class="text-3xl font-bold text-white">{{ celebrity.name }}</h1>
-                                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded mt-2">{{ celebrity.get_category_display }}</span>
+                                <span class="inline-block bg-primary-900 text-primary-400 text-xs font-semibold px-2.5 py-0.5 rounded mt-2">{{ celebrity.get_category_display }}</span>
                             </div>
                         </div>
                     </div>
@@ -124,164 +139,80 @@
                     <div class="md:w-1/2 lg:w-3/5 p-6 md:p-10 animate-slide-right">
                         <div class="hidden md:block mb-6">
                             <div class="flex justify-between items-start">
-                                <h1 class="text-3xl md:text-4xl font-bold text-gray-800">{{ celebrity.name }}</h1>
-                                <span class="inline-block bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded">{{ celebrity.get_category_display }}</span>
+                                <h1 class="text-3xl md:text-4xl font-bold text-white">{{ celebrity.name }}</h1>
+                                <span class="inline-block bg-primary-900 text-primary-400 text-sm font-semibold px-3 py-1 rounded">{{ celebrity.get_category_display }}</span>
                             </div>
                         </div>
                         
                         <div class="mb-8">
-                            <h2 class="text-xl font-semibold text-gray-800 mb-3">About</h2>
-                            <p class="text-gray-600">{{ celebrity.bio }}</p>
+                            <h2 class="text-xl font-semibold text-white mb-3">About</h2>
+                            <p class="text-gray-300">{{ celebrity.bio }}</p>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div class="flex items-center">
-                                <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="w-12 h-12 rounded-full bg-dark-700 border border-primary-900 flex items-center justify-center mr-4">
+                                    <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-500">Experience</p>
-                                    <p class="font-medium">{{ celebrity.years_of_experience }} years</p>
+                                    <p class="text-sm text-gray-400">Experience</p>
+                                    <p class="font-medium text-white">{{ celebrity.years_of_experience }} years</p>
                                 </div>
                             </div>
                             
                             <div class="flex items-center">
-                                <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="w-12 h-12 rounded-full bg-dark-700 border border-primary-900 flex items-center justify-center mr-4">
+                                    <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-500">Languages</p>
-                                    <p class="font-medium">{{ celebrity.languages }}</p>
+                                    <p class="text-sm text-gray-400">Languages</p>
+                                    <p class="font-medium text-white">{{ celebrity.languages }}</p>
                                 </div>
                             </div>
                             
                             <div class="flex items-center">
-                                <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="w-12 h-12 rounded-full bg-dark-700 border border-primary-900 flex items-center justify-center mr-4">
+                                    <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-500">Specialties</p>
-                                    <p class="font-medium">{{ celebrity.specialties }}</p>
+                                    <p class="text-sm text-gray-400">Specialties</p>
+                                    <p class="font-medium text-white">{{ celebrity.specialties }}</p>
                                 </div>
                             </div>
                             
                             <div class="flex items-center">
-                                <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div class="w-12 h-12 rounded-full bg-dark-700 border border-primary-900 flex items-center justify-center mr-4">
+                                    <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-500">Hourly Rate</p>
-                                    <p class="font-medium text-purple-600">${{ celebrity.hourly_rate }}</p>
+                                    <p class="text-sm text-gray-400">Hourly Rate</p>
+                                    <p class="font-medium text-primary-400">${{ celebrity.hourly_rate }}</p>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                            <a href="{% url 'book_reservation' celebrity.id %}" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-purple-200">
-                                <span class="relative rounded-full bg-white px-8 py-3.5 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-purple-700 font-semibold text-lg group-hover:text-white">
-                                    Book Now
-                                </span>
+                            <a href="{% url 'book_reservation' celebrity.id %}" class="btn-primary hover-lift">
+                                <span>Book Now</span>
                             </a>
-                            <a href="#availability" class="inline-flex items-center justify-center px-8 py-3.5 border-2 border-purple-600 text-purple-600 hover:bg-purple-50 rounded-full font-semibold text-lg transition-colors">
-                                Check Availability
+                            <a href="{% url 'membership_info' %}" class="btn-outline hover-lift">
+                                Apply For Fan Membership Card
+                            </a>
+                            <a href="{% url 'donate_charity' %}" class="btn-outline hover-lift">
+                                Donate to Charity
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Availability Section -->
-                <div id="availability" class="border-t border-gray-200 p-6 md:p-10">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Availability</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {% for date in availability_dates %}
-                        <div class="border border-gray-200 rounded-lg p-4 hover-lift">
-                            <h3 class="font-semibold text-gray-800 mb-3">{{ date.date|date:"l, F j, Y" }}</h3>
-                            <div class="space-y-2">
-                                {% for slot in date.slots %}
-                                <div class="flex items-center">
-                                    <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <span>{{ slot.start_time|time:"g:i A" }} - {{ slot.end_time|time:"g:i A" }}</span>
-                                </div>
-                                {% empty %}
-                                <div class="text-gray-500">No available slots</div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% empty %}
-                        <div class="col-span-3 text-center py-8 bg-gray-50 rounded-lg">
-                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            <p class="text-gray-600">No availability information at the moment.</p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                
-                <!-- Reviews Section -->
-                <div class="border-t border-gray-200 p-6 md:p-10">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-semibold text-gray-800">Reviews</h2>
-                        <div class="flex items-center">
-                            <div class="flex text-yellow-400 mr-2">
-                                {% for i in "12345" %}
-                                <svg class="w-5 h-5 {% if forloop.counter <= celebrity.average_rating %}text-yellow-400{% else %}text-gray-300{% endif %}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                </svg>
-                                {% endfor %}
-                            </div>
-                            <span class="text-gray-700 font-medium">{{ celebrity.average_rating|floatformat:1 }} ({{ celebrity.reviews.count }} reviews)</span>
-                        </div>
-                    </div>
-                    
-                    {% if celebrity.reviews.all %}
-                    <div class="space-y-6">
-                        {% for review in celebrity.reviews.all %}
-                        <div class="bg-gray-50 rounded-lg p-6 animate-fade-in delay-{{ forloop.counter|add:"100" }}">
-                            <div class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                                        <span class="text-purple-600 font-bold text-xl">{{ review.user.first_name|first }}</span>
-                                    </div>
-                                </div>
-                                <div class="ml-4 flex-1">
-                                    <div class="flex justify-between">
-                                        <h4 class="font-semibold text-gray-800">{{ review.user.get_full_name }}</h4>
-                                        <span class="text-sm text-gray-500">{{ review.created_at|date:"M d, Y" }}</span>
-                                    </div>
-                                    <div class="flex text-yellow-400 my-1">
-                                        {% for i in "12345" %}
-                                        <svg class="w-4 h-4 {% if forloop.counter <= review.rating %}text-yellow-400{% else %}text-gray-300{% endif %}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                        </svg>
-                                        {% endfor %}
-                                    </div>
-                                    <p class="text-gray-600">{{ review.comment }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <div class="text-center py-8 bg-gray-50 rounded-lg">
-                        <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-                        </svg>
-                        <p class="text-gray-600">No reviews yet. Be the first to leave a review after your session!</p>
-                    </div>
-                    {% endif %}
-                </div>
             </div>
         </div>
     </section>

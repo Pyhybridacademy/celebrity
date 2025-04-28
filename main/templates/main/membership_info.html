@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Fan Membership - Celebrity Meet & Greet{% endblock %}
+
+{% block content %}
+<div class="bg-dark-900 min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative py-16 bg-gradient-to-b from-dark-800 to-dark-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Fan Membership Card</h1>
+                <p class="text-xl text-gray-300 mb-8">Join our exclusive fan club and get special access to your favorite celebrities</p>
+                <a href="{% url 'apply_membership' %}" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-colors">
+                    Apply Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Tiers -->
+    <section class="py-16 bg-dark-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Membership Tiers</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for tier in tiers %}
+                <div class="bg-dark-700 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-primary-400 mb-4">{{ tier.name }}</h3>
+                        <div class="text-3xl font-bold text-white mb-6">${{ tier.price }}<span class="text-lg text-gray-400 font-normal">/year</span></div>
+                        
+                        <div class="text-gray-300 mb-6">
+                            {{ tier.description|linebreaks }}
+                        </div>
+                        
+                        <div class="border-t border-gray-700 pt-6 mt-6">
+                            <h4 class="text-lg font-semibold text-white mb-4">Benefits:</h4>
+                            <div class="text-gray-300">
+                                {{ tier.benefits|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="px-8 pb-8">
+                        <a href="{% url 'apply_membership' %}?tier={{ tier.id }}" class="block w-full bg-primary-600 hover:bg-primary-700 text-white text-center font-semibold py-3 rounded-lg transition-colors">
+                            Select {{ tier.name }}
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-3 text-center py-12">
+                    <p class="text-gray-400 text-xl">No membership tiers available at the moment.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Benefits -->
+    <section class="py-16 bg-dark-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Why Join Our Fan Club?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-dark-800 p-8 rounded-xl">
+                    <div class="text-primary-500 text-4xl mb-4">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Priority Access</h3>
+                    <p class="text-gray-400">Get early access to bookings and special events before they're available to the public.</p>
+                </div>
+                
+                <div class="bg-dark-800 p-8 rounded-xl">
+                    <div class="text-primary-500 text-4xl mb-4">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Exclusive Discounts</h3>
+                    <p class="text-gray-400">Enjoy special member pricing on all bookings and merchandise.</p>
+                </div>
+                
+                <div class="bg-dark-800 p-8 rounded-xl">
+                    <div class="text-primary-500 text-4xl mb-4">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Special Gifts</h3>
+                    <p class="text-gray-400">Receive exclusive merchandise and surprise gifts throughout the year.</p>
+                </div>
+                
+                <div class="bg-dark-800 p-8 rounded-xl">
+                    <div class="text-primary-500 text-4xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Community Access</h3>
+                    <p class="text-gray-400">Join our private community and connect with other fans and celebrities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-dark-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-white mb-2">How long is the membership valid?</h3>
+                    <p class="text-gray-400">Memberships are valid for one year from the date of approval.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-white mb-2">How do I receive my membership card?</h3>
+                    <p class="text-gray-400">Once your application is approved, we'll send you a digital membership card via email. Physical cards are mailed to the address provided during registration.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-white mb-2">Can I upgrade my membership tier?</h3>
+                    <p class="text-gray-400">Yes, you can upgrade your membership at any time by paying the difference between your current tier and the new tier.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-white mb-2">How do I use my membership benefits?</h3>
+                    <p class="text-gray-400">Your membership ID will be automatically applied when you log in to make bookings. For in-person events, simply present your membership card.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-b from-dark-900 to-dark-800">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Ready to Join?</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Become a member today and start enjoying exclusive benefits with your favorite celebrities.</p>
+            <a href="{% url 'apply_membership' %}" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-colors">
+                Apply for Membership
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}

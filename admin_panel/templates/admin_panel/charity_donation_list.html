@@ -1,0 +1,120 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Charity Donations{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Charity Donations</h1>
+    </div>
+    
+    {% if messages %}
+    <div class="mb-8">
+        {% for message in messages %}
+        <div class="{% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} p-4 rounded-lg">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
+                <div>
+                    <h2 class="text-lg font-semibold">Filter Donations</h2>
+                </div>
+                <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
+                    <select id="status-filter" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="all">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="verified">Verified</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <select id="payment-method-filter" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <option value="all">All Payment Methods</option>
+                        <option value="crypto">Cryptocurrency</option>
+                        <option value="giftcard">Gift Card</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Donor</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for donation in donations %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">
+                                {% if donation.anonymous %}
+                                Anonymous
+                                {% else %}
+                                {{ donation.donor_name }}
+                                {% endif %}
+                            </div>
+                            <div class="text-sm text-gray-500">{{ donation.donor_email }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${{ donation.amount }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ donation.get_payment_method_display }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ donation.created_at|date:"M d, Y" }}</div>
+                            <div class="text-sm text-gray-500">{{ donation.created_at|time:"H:i" }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if donation.status == 'verified' %}bg-green-100 text-green-800
+                                {% elif donation.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-red-100 text-red-800{% endif %}">
+                                {{ donation.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <a href="{% url 'admin_charity_donation_detail' donation.id %}" class="text-purple-600 hover:text-purple-900">View Details</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            No donations found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-lg font-semibold mb-4">Donation Statistics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-purple-50 rounded-lg p-4">
+                <p class="text-sm text-gray-500">Total Donations</p>
+                <p class="text-2xl font-bold text-purple-900">{{ donations|length }}</p>
+            </div>
+            <div class="bg-green-50 rounded-lg p-4">
+                <p class="text-sm text-gray-500">Verified Donations</p>
+                <p class="text-2xl font-bold text-green-700">${{ total_verified_amount }}</p>
+            </div>
+            <div class="bg-yellow-50 rounded-lg p-4">
+                <p class="text-sm text-gray-500">Pending Verification</p>
+                <p class="text-2xl font-bold text-yellow-700">{{ pending_count }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

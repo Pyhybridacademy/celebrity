@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+{% block title %}Donate to Charity - Celebrity Meet & Greet{% endblock %}
+
+{% block content %}
+<div class="bg-dark-900 min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative py-16 bg-gradient-to-b from-dark-800 to-dark-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Support Our Charity Initiatives</h1>
+                <p class="text-xl text-gray-300 mb-8">100% of your donation goes directly to helping those in need</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Form Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-dark-800 rounded-xl shadow-lg p-8">
+                    <form method="post" enctype="multipart/form-data" id="donationForm">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="bg-red-900 text-white p-4 rounded-lg mb-6">
+                            {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Donation Amount -->
+                        <div class="mb-8">
+                            <h2 class="text-xl font-semibold text-white mb-4">Donation Amount</h2>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                <div class="relative">
+                                    <input type="radio" name="amount_preset" id="amount_10" value="10" class="hidden peer">
+                                    <label for="amount_10" 
+                                           class="block p-4 bg-dark-700 border-2 border-gray-700 rounded-lg cursor-pointer 
+                                                  peer-checked:border-primary-500 peer-checked:bg-dark-600 transition-all text-center">
+                                        <span class="text-xl font-bold text-white">$10</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="radio" name="amount_preset" id="amount_25" value="25" class="hidden peer">
+                                    <label for="amount_25" 
+                                           class="block p-4 bg-dark-700 border-2 border-gray-700 rounded-lg cursor-pointer 
+                                                  peer-checked:border-primary-500 peer-checked:bg-dark-600 transition-all text-center">
+                                        <span class="text-xl font-bold text-white">$25</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="radio" name="amount_preset" id="amount_50" value="50" class="hidden peer">
+                                    <label for="amount_50" 
+                                           class="block p-4 bg-dark-700 border-2 border-gray-700 rounded-lg cursor-pointer 
+                                                  peer-checked:border-primary-500 peer-checked:bg-dark-600 transition-all text-center">
+                                        <span class="text-xl font-bold text-white">$50</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="radio" name="amount_preset" id="amount_100" value="100" class="hidden peer">
+                                    <label for="amount_100" 
+                                           class="block p-4 bg-dark-700 border-2 border-gray-700 rounded-lg cursor-pointer 
+                                                  peer-checked:border-primary-500 peer-checked:bg-dark-600 transition-all text-center">
+                                        <span class="text-xl font-bold text-white">$100</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="relative">
+                                <label for="{{ form.amount.id_for_label }}" class="block text-gray-300 mb-2">Custom Amount ($) *</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <span class="text-gray-400">$</span>
+                                    </div>
+                                    {{ form.amount }}
+                                </div>
+                                {% if form.amount.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.amount.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Donor Information -->
+                        <div class="mb-8">
+                            <h2 class="text-xl font-semibold text-white mb-4">Donor Information</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="{{ form.donor_name.id_for_label }}" class="block text-gray-300 mb-2">Full Name *</label>
+                                    {{ form.donor_name }}
+                                    {% if form.donor_name.errors %}
+                                    <p class="text-red-500 text-sm mt-1">{{ form.donor_name.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+                                
+                                <div>
+                                    <label for="{{ form.donor_email.id_for_label }}" class="block text-gray-300 mb-2">Email Address *</label>
+                                    {{ form.donor_email }}
+                                    {% if form.donor_email.errors %}
+                                    <p class="text-red-500 text-sm mt-1">{{ form.donor_email.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <div class="flex items-center">
+                                    {{ form.anonymous }}
+                                    <label for="{{ form.anonymous.id_for_label }}" class="ml-2 text-gray-300">
+                                        Make my donation anonymous
+                                    </label>
+                                </div>
+                                <p class="text-gray-400 text-sm mt-1">If checked, your name will not be displayed in our donor list.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Charity Selection -->
+                        <div class="mb-8">
+                            <h2 class="text-xl font-semibold text-white mb-4">Select Charity</h2>
+                            <div>
+                                <label for="{{ form.charity.id_for_label }}" class="block text-gray-300 mb-2">Charity *</label>
+                                {{ form.charity }}
+                                {% if form.charity.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.charity.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mt-4">
+                                <label for="{{ form.message.id_for_label }}" class="block text-gray-300 mb-2">Message (Optional)</label>
+                                {{ form.message }}
+                                {% if form.message.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.message.errors.0 }}</p>
+                                {% endif %}
+                                <p class="text-gray-400 text-sm mt-1">Share why you're donating or leave a message of support.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Information -->
+                        <div class="mb-8">
+                            <h2 class="text-xl font-semibold text-white mb-4">Payment Information</h2>
+                            
+                            <div class="mb-6">
+                                <label class="block text-gray-300 mb-2">Payment Method *</label>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <input type="radio" name="payment_method" id="payment_crypto" value="crypto" 
+                                               class="hidden peer" required>
+                                        <label for="payment_crypto" 
+                                               class="block p-4 bg-dark-700 border-2 border-gray-700 rounded-lg cursor-pointer 
+                                                      peer-checked:border-primary-500 peer-checked:bg-dark-600 transition-all">
+                                            <span class="flex items-center">
+                                                <i class="fab fa-bitcoin text-2xl mr-3 text-yellow-500"></i>
+                                                <span class="text-lg font-semibold text-white">Cryptocurrency</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="relative">
+                                        <input type="radio" name="payment_method" id="payment_giftcard" value="giftcard" 
+                                               class="hidden peer" required>
+                                        <label for="payment_giftcard" 
+                                               class="block p-4 bg-dark-700 border-2 border-gray-700 rounded-lg cursor-pointer 
+                                                      peer-checked:border-primary-500 peer-checked:bg-dark-600 transition-all">
+                                            <span class="flex items-center">
+                                                <i class="fas fa-gift text-2xl mr-3 text-purple-500"></i>
+                                                <span class="text-lg font-semibold text-white">Gift Card</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                {% if form.payment_method.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.payment_method.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Crypto Payment Instructions -->
+                            <div id="cryptoInstructions" class="mt-6 p-6 bg-dark-700 rounded-lg hidden">
+                                <h3 class="text-lg font-semibold text-white mb-3">Cryptocurrency Payment Instructions</h3>
+                                <p class="text-gray-300 mb-4">Please send the exact amount to one of the following wallet addresses:</p>
+                                
+                                <div class="space-y-4">
+                                    {% for wallet in crypto_wallets %}
+                                    <div class="p-4 bg-dark-600 rounded-lg">
+                                        <div class="flex flex-col md:flex-row md:items-center justify-between">
+                                            <div>
+                                                <h4 class="font-semibold text-primary-400">{{ wallet.currency }}</h4>
+                                                <div class="flex items-center mt-2">
+                                                    <code class="bg-dark-800 p-2 rounded text-gray-300 text-sm break-all">{{ wallet.wallet_address }}</code>
+                                                    <button type="button" class="ml-2 text-primary-400 hover:text-primary-300" 
+                                                            onclick="copyToClipboard('{{ wallet.wallet_address }}')">
+                                                        <i class="fas fa-copy"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {% if wallet.qr_code %}
+                                            <div class="mt-4 md:mt-0">
+                                                <img src="{{ wallet.qr_code.url }}" alt="{{ wallet.currency }} QR Code" class="w-24 h-24">
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                <p class="text-yellow-500 mt-4">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    Important: After sending payment, please provide the transaction details and upload a screenshot of the transaction below.
+                                </p>
+                            </div>
+                            
+                            <!-- Gift Card Instructions -->
+                            <div id="giftcardInstructions" class="mt-6 p-6 bg-dark-700 rounded-lg hidden">
+                                <h3 class="text-lg font-semibold text-white mb-3">Gift Card Payment Instructions</h3>
+                                <p class="text-gray-300 mb-4">We accept the following gift cards:</p>
+                                
+                                <ul class="list-disc list-inside text-gray-300 mb-4">
+                                    <li>Amazon Gift Cards</li>
+                                    <li>Apple App Store & iTunes Gift Cards</li>
+                                    <li>Google Play Gift Cards</li>
+                                    <li>Visa/Mastercard Gift Cards</li>
+                                </ul>
+                                
+                                <p class="text-gray-300 mb-4">Please purchase a gift card for the exact amount of your donation. Then upload a clear photo of the gift card showing the code and provide the card details below.</p>
+                                
+                                <p class="text-yellow-500">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    Important: Do not share your gift card details with anyone else. Upload the image and provide the details only through this secure form.
+                                </p>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <label for="{{ form.payment_proof.id_for_label }}" class="block text-gray-300 mb-2">Payment Proof (Screenshot/Photo) *</label>
+                                {{ form.payment_proof }}
+                                {% if form.payment_proof.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.payment_proof.errors.0 }}</p>
+                                {% endif %}
+                                <p class="text-gray-400 text-sm mt-1">Upload a screenshot of your crypto transaction or a photo of your gift card.</p>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <label for="{{ form.payment_details.id_for_label }}" class="block text-gray-300 mb-2">Payment Details *</label>
+                                {{ form.payment_details }}
+                                {% if form.payment_details.errors %}
+                                <p class="text-red-500 text-sm mt-1">{{ form.payment_details.errors.0 }}</p>
+                                {% endif %}
+                                <p class="text-gray-400 text-sm mt-1">For crypto: provide the transaction ID. For gift cards: provide the card number and PIN.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Terms and Conditions -->
+                        <div class="mb-8">
+                            <div class="flex items-start">
+                                                                <div class="flex items-center h-5">
+                                    <input id="terms" type="checkbox" class="w-4 h-4 bg-dark-700 border-gray-600 rounded focus:ring-primary-500" required>
+                                </div>
+                                <label for="terms" class="ml-2 text-sm text-gray-300">
+                                    I confirm that this donation is voluntary and I agree to the <a href="#" class="text-primary-400 hover:underline">Terms and Conditions</a> and <a href="#" class="text-primary-400 hover:underline">Privacy Policy</a>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors">
+                                Complete Donation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="py-16 bg-dark-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Your Donation Makes a Difference</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-dark-700 p-8 rounded-xl">
+                    <div class="text-primary-500 text-4xl mb-4">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Direct Impact</h3>
+                    <p class="text-gray-400">100% of your donation goes directly to the charity of your choice. We cover all processing fees.</p>
+                </div>
+                
+                <div class="bg-dark-700 p-8 rounded-xl">
+                    <div class="text-primary-500 text-4xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Verified Charities</h3>
+                    <p class="text-gray-400">We partner only with legitimate, registered charitable organizations with proven track records.</p>
+                </div>
+                
+                <div class="bg-dark-700 p-8 rounded-xl">
+                    <div class="text-primary-500 text-4xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Transparent Reporting</h3>
+                    <p class="text-gray-400">We provide regular updates on how your donations are being used and the impact they're making.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Donations -->
+    <section class="py-16 bg-dark-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Recent Donations</h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-dark-800 rounded-xl overflow-hidden">
+                    <div class="p-6 border-b border-dark-700">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-white font-medium">John D.</p>
+                                <p class="text-gray-400 text-sm">2 hours ago</p>
+                            </div>
+                            <div class="text-primary-400 font-bold">$50</div>
+                        </div>
+                        <p class="text-gray-300 mt-2 text-sm italic">"Happy to support this amazing cause!"</p>
+                    </div>
+                    
+                    <div class="p-6 border-b border-dark-700">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-white font-medium">Anonymous</p>
+                                <p class="text-gray-400 text-sm">5 hours ago</p>
+                            </div>
+                            <div class="text-primary-400 font-bold">$100</div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 border-b border-dark-700">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-white font-medium">Sarah M.</p>
+                                <p class="text-gray-400 text-sm">Yesterday</p>
+                            </div>
+                            <div class="text-primary-400 font-bold">$25</div>
+                        </div>
+                        <p class="text-gray-300 mt-2 text-sm italic">"Keep up the great work!"</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        <a href="{% url 'donation_list' %}" class="text-primary-400 hover:text-primary-300 font-medium flex items-center justify-center">
+                            View All Donations
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-b from-dark-900 to-dark-800">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Together We Can Make a Difference</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Every donation, no matter how small, contributes to creating positive change in the world.</p>
+            <a href="#donationForm" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-colors">
+                Donate Now
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Style form elements
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select');
+        inputs.forEach(input => {
+            if (input.type !== 'checkbox' && input.type !== 'radio') {
+                input.classList.add('w-full', 'bg-dark-700', 'border', 'border-gray-600', 'rounded-lg', 'p-3', 'text-white', 'focus:ring-primary-500', 'focus:border-primary-500');
+            }
+        });
+        
+        // Add padding for amount field with $ sign
+        const amountField = document.getElementById('{{ form.amount.id_for_label }}');
+        if (amountField) {
+            amountField.classList.add('pl-8');
+        }
+        
+        // Payment method toggle
+        const cryptoRadio = document.getElementById('payment_crypto');
+        const giftcardRadio = document.getElementById('payment_giftcard');
+        const cryptoInstructions = document.getElementById('cryptoInstructions');
+        const giftcardInstructions = document.getElementById('giftcardInstructions');
+        
+        function updatePaymentInstructions() {
+            if (cryptoRadio.checked) {
+                cryptoInstructions.classList.remove('hidden');
+                giftcardInstructions.classList.add('hidden');
+            } else if (giftcardRadio.checked) {
+                cryptoInstructions.classList.add('hidden');
+                giftcardInstructions.classList.remove('hidden');
+            } else {
+                cryptoInstructions.classList.add('hidden');
+                giftcardInstructions.classList.add('hidden');
+            }
+        }
+        
+        cryptoRadio.addEventListener('change', updatePaymentInstructions);
+        giftcardRadio.addEventListener('change', updatePaymentInstructions);
+        
+        // Copy wallet address to clipboard
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Wallet address copied to clipboard!');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        };
+        
+        // Preset amount selection
+        const presetAmounts = document.querySelectorAll('input[name="amount_preset"]');
+        presetAmounts.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    amountField.value = this.value;
+                }
+            });
+        });
+        
+        // File input preview
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        let preview = document.getElementById('file-preview');
+                        if (!preview) {
+                            preview = document.createElement('div');
+                            preview.id = 'file-preview';
+                            preview.classList.add('mt-3');
+                            fileInput.parentNode.appendChild(preview);
+                        }
+                        
+                        preview.innerHTML = `
+                            <div class="bg-dark-600 p-3 rounded-lg flex items-center">
+                                <div class="w-16 h-16 bg-dark-500 rounded overflow-hidden mr-3">
+                                    <img src="${e.target.result}" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">${fileInput.files[0].name}</p>
+                                    <p class="text-gray-400 text-sm">${(fileInput.files[0].size / 1024 / 1024).toFixed(2)} MB</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+        
+        // Smooth scroll to donation form
+        document.querySelectorAll('a[href="#donationForm"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('donationForm').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}
+

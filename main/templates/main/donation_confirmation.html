@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Donation Confirmation - Celebrity Meet & Greet{% endblock %}
+
+{% block content %}
+<div class="bg-dark-900 min-h-screen py-16">
+    <div class="container mx-auto px-6">
+        <div class="max-w-3xl mx-auto bg-dark-800 rounded-xl shadow-lg p-8 text-center">
+            <div class="mb-6 text-green-500">
+                <i class="fas fa-heart text-6xl"></i>
+            </div>
+            
+            <h1 class="text-3xl font-bold text-white mb-4">Thank You for Your Donation!</h1>
+            
+            <p class="text-xl text-gray-300 mb-8">
+                Your generosity will help make a real difference. We've received your donation and will process it shortly.
+            </p>
+            
+            <div class="bg-dark-700 rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold text-white mb-4">Donation Details</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div>
+                        <p class="text-gray-400">Donor:</p>
+                        <p class="text-white font-medium">{{ donation.donor_name }}</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-400">Amount:</p>
+                        <p class="text-white font-medium">${{ donation.amount }}</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-400">Charity:</p>
+                        <p class="text-white font-medium">{{ donation.charity }}</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-400">Date:</p>
+                        <p class="text-white font-medium">{{ donation.created_at|date:"F j, Y" }}</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-400">Status:</p>
+                        <p class="font-medium 
+                            {% if donation.status == 'pending' %}text-yellow-500
+                            {% elif donation.status == 'verified' %}text-green-500
+                            {% else %}text-red-500{% endif %}">
+                            {{ donation.get_status_display }}
+                        </p>
+                    </div>
+                </div>
+                
+                {% if donation.message %}
+                <div class="mt-4 text-left">
+                    <p class="text-gray-400">Your Message:</p>
+                    <p class="text-white italic">{{ donation.message }}</p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="bg-dark-700 rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold text-white mb-4">What's Next?</h2>
+                
+                <ol class="text-left space-y-4">
+                    <li class="flex">
+                        <span class="bg-primary-900 text-primary-400 rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">1</span>
+                        <div>
+                            <p class="text-white">Our team will verify your payment</p>
+                            <p class="text-gray-400 text-sm">This usually takes 1-2 business days</p>
+                        </div>
+                    </li>
+                    
+                    <li class="flex">
+                        <span class="bg-primary-900 text-primary-400 rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">2</span>
+                        <div>
+                            <p class="text-white">You'll receive a confirmation email</p>
+                            <p class="text-gray-400 text-sm">Once your donation is verified</p>
+                        </div>
+                    </li>
+                    
+                    <li class="flex">
+                        <span class="bg-primary-900 text-primary-400 rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">3</span>
+                                                <div>
+                            <p class="text-white">Your donation will be transferred to the charity</p>
+                            <p class="text-gray-400 text-sm">We'll provide updates on the impact of your contribution</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="bg-dark-700 rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold text-white mb-4">Share Your Generosity</h2>
+                <p class="text-gray-300 mb-4">Inspire others by sharing your donation on social media.</p>
+                
+                <div class="flex justify-center space-x-4">
+                    <a href="https://twitter.com/intent/tweet?text=I%20just%20donated%20to%20{{ donation.charity|urlencode }}%20through%20Celebrity%20Meet%20%26%20Greet!%20Join%20me%20in%20making%20a%20difference.&url={{ request.build_absolute_uri|urlencode }}" 
+                       target="_blank" rel="noopener noreferrer"
+                       class="bg-[#1DA1F2] hover:bg-[#0d8fd9] text-white p-3 rounded-full transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" 
+                       target="_blank" rel="noopener noreferrer"
+                       class="bg-[#4267B2] hover:bg-[#365899] text-white p-3 rounded-full transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri|urlencode }}" 
+                       target="_blank" rel="noopener noreferrer"
+                       class="bg-[#0077B5] hover:bg-[#006399] text-white p-3 rounded-full transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <a href="{% url 'home' %}" class="bg-dark-700 hover:bg-dark-600 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                    Return to Home
+                </a>
+                
+                <a href="{% url 'donate_charity' %}" class="bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                    Make Another Donation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

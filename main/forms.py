@@ -3,6 +3,28 @@ from django import forms
 from .models import Reservation
 from django.utils import timezone
 import datetime
+from django import forms
+from .models import MembershipApplication, CharityDonation, MembershipTier
+
+class MembershipApplicationForm(forms.ModelForm):
+    class Meta:
+        model = MembershipApplication
+        fields = ['tier', 'full_name', 'email', 'phone_number', 'address', 
+                  'payment_method', 'payment_proof', 'payment_details']
+        widgets = {
+            'address': forms.Textarea(attrs={'rows': 3}),
+            'payment_details': forms.Textarea(attrs={'rows': 3}),
+        }
+
+class CharityDonationForm(forms.ModelForm):
+    class Meta:
+        model = CharityDonation
+        fields = ['donor_name', 'donor_email', 'amount', 'payment_method', 
+                  'payment_proof', 'payment_details', 'message', 'anonymous']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 3}),
+            'payment_details': forms.Textarea(attrs={'rows': 3}),
+        }
 
 class ReservationForm(forms.ModelForm):
     booking_date = forms.DateField(

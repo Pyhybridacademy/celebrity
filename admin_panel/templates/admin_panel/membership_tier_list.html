@@ -1,0 +1,54 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Membership Tiers{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Membership Tiers</h1>
+        <a href="{% url 'admin_add_membership_tier' %}" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg">Add New Tier</a>
+    </div>
+    
+    {% if messages %}
+    <div class="mb-8">
+        {% for message in messages %}
+        <div class="{% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} p-4 rounded-lg">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for tier in tiers %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-purple-50">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-semibold text-purple-900">{{ tier.name }}</h2>
+                    <span class="text-lg font-bold text-purple-700">${{ tier.price }}</span>
+                </div>
+                <p class="text-sm text-gray-600">{{ tier.duration_days }} days</p>
+            </div>
+            <div class="p-6">
+                <div class="mb-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Description</h3>
+                    <p class="text-gray-600">{{ tier.description }}</p>
+                </div>
+                <div class="mb-6">
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Benefits</h3>
+                    <p class="text-gray-600">{{ tier.benefits }}</p>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <a href="{% url 'admin_edit_membership_tier' tier.id %}" class="text-purple-600 hover:text-purple-900">Edit</a>
+                    <a href="{% url 'admin_delete_membership_tier' tier.id %}" class="text-red-600 hover:text-red-900">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-3 bg-white rounded-lg shadow-md p-6 text-center">
+            <p class="text-gray-500">No membership tiers found. <a href="{% url 'admin_add_membership_tier' %}" class="text-purple-600 hover:text-purple-800">Add one now</a>.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

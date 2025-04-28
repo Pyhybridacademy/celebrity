@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Donation Status Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #6b46c1;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .verified {
+            background-color: #d1fae5;
+            color: #047857;
+        }
+        .pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .rejected {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Donation Status Update</h1>
+    </div>
+    <div class="content">
+        <p>Dear {{ donation.donor_name }},</p>
+        
+        <p>We are writing to inform you that the status of your donation has been updated.</p>
+        
+        <p>Your donation status is now: 
+            <span class="status {% if donation.status == 'verified' %}verified{% elif donation.status == 'pending' %}pending{% else %}rejected{% endif %}">
+                {{ donation.get_status_display }}
+            </span>
+        </p>
+        
+        <h3>Donation Details:</h3>
+        <ul>
+            <li>Amount: ${{ donation.amount }}</li>
+            <li>Payment Method: {{ donation.get_payment_method_display }}</li>
+            <li>Date: {{ donation.created_at|date:"F d, Y" }}</li>
+        </ul>
+        
+        {% if donation.status == 'verified' %}
+        <p>Thank you for your generous donation! Your contribution has been verified and will help support our charitable initiatives.</p>
+        
+        <p>Your support means a lot to us and the communities we serve. We are grateful for your generosity and commitment to making a difference.</p>
+        
+        {% elif donation.status == 'rejected' %}
+        <p>We regret to inform you that we were unable to verify your donation at this time. This could be due to various reasons, such as payment verification issues or incomplete information.</p>
+        
+        <p>If you would like more information about why your donation was rejected or if you wish to try again, please contact our support team.</p>
+        
+        {% else %}
+        <p>Your donation is currently under review. We will notify you once the verification process is complete.</p>
+        {% endif %}
+        
+        <p>If you have any questions or need further assistance, please don't hesitate to contact us.</p>
+        
+        <p>Thank you for your support!</p>
+        
+        <p>Best regards,<br>
+        The Celebrity Meet & Greet Team</p>
+    </div>
+    <div class="footer">
+        <p>This is an automated email. Please do not reply directly to this message.</p>
+        <p>&copy; {% now "Y" %} Celebrity Meet & Greet. All rights reserved.</p>
+    </div>
+</body>
+</html>

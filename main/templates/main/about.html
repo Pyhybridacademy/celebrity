@@ -22,9 +22,14 @@
     .delay-400 { animation-delay: 0.4s; }
     .delay-500 { animation-delay: 0.5s; }
     
-    /* Fix for horizontal scrollbar */
-    .overflow-x-hidden {
-        overflow-x: hidden;
+    /* Hover effects */
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     }
     
     /* Decorative elements */
@@ -33,43 +38,48 @@
         z-index: -1;
         pointer-events: none;
     }
+    
+    /* Fix for horizontal scrollbar */
+    .overflow-x-hidden {
+        overflow-x: hidden;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="overflow-x-hidden">
     <!-- Hero Section -->
-    <section class="relative py-16 bg-gradient-to-b from-purple-50 to-white">
-        <!-- Background decorative elements - fixed to prevent overflow -->
-        <div class="decorative-blob top-0 right-0 w-64 h-64 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
-        <div class="decorative-blob bottom-0 left-0 w-64 h-64 bg-indigo-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+    <section class="relative py-16 bg-dark-900">
+        <!-- Background decorative elements -->
+        <div class="decorative-blob top-0 right-0 w-64 h-64 bg-primary-900 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+        <div class="decorative-blob bottom-0 left-0 w-64 h-64 bg-accent-900 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
         
         <div class="container mx-auto px-6">
             <div class="text-center max-w-3xl mx-auto animate-fade-in">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">About Celebrity Meet & Greet</h1>
-                <p class="text-xl text-gray-600">Connecting fans with their favorite celebrities for unforgettable experiences</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">About Celebrity Meet & Greet</h1>
+                <p class="text-xl text-gray-300">Connecting fans with their favorite celebrities for unforgettable experiences</p>
             </div>
         </div>
     </section>
     
     <!-- Our Story Section -->
-    <section class="py-16">
+    <section class="py-16 bg-dark-800">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in delay-100">
+                <div class="bg-dark-700 rounded-2xl shadow-xl overflow-hidden hover-lift animate-fade-in delay-100">
                     <div class="md:flex">
                         <div class="md:w-1/2">
                             <img src="https://via.placeholder.com/600x400?text=Our+Story" alt="Our Story" class="w-full h-full object-cover">
                         </div>
                         <div class="md:w-1/2 p-8">
-                            <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Story</h2>
-                            <p class="text-gray-600 mb-4">
+                            <h2 class="text-3xl font-bold text-white mb-4">Our Story</h2>
+                            <p class="text-gray-300 mb-4">
                                 Celebrity Meet & Greet was founded in 2020 with a simple mission: to create meaningful connections between fans and the celebrities they admire.
                             </p>
-                            <p class="text-gray-600 mb-4">
+                            <p class="text-gray-300 mb-4">
                                 What started as a small operation has grown into a trusted platform that has facilitated thousands of memorable experiences across the country.
                             </p>
-                            <p class="text-gray-600">
+                            <p class="text-gray-300">
                                 We believe that everyone deserves the chance to meet their heroes, and we're dedicated to making these dreams come true in a safe, professional, and enjoyable environment.
                             </p>
                         </div>
@@ -80,43 +90,43 @@
     </section>
     
     <!-- Our Mission Section -->
-    <section class="py-16 bg-purple-50">
+    <section class="py-16 bg-dark-700">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-3xl mx-auto animate-fade-in delay-200">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">Our Mission</h2>
-                <p class="text-xl text-gray-600 mb-8">
+                <h2 class="text-3xl font-bold text-white mb-6">Our Mission</h2>
+                <p class="text-xl text-gray-300 mb-8">
                     To create unforgettable moments by connecting fans with their favorite celebrities in a personal and meaningful way.
                 </p>
                 
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <div class="bg-dark-600 p-6 rounded-xl shadow-md hover-lift">
+                        <div class="w-16 h-16 bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Authentic Connections</h3>
-                        <p class="text-gray-600">We facilitate genuine interactions between fans and celebrities, creating lasting memories.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Authentic Connections</h3>
+                        <p class="text-gray-300">We facilitate genuine interactions between fans and celebrities, creating lasting memories.</p>
                     </div>
                     
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <div class="bg-dark-600 p-6 rounded-xl shadow-md hover-lift">
+                        <div class="w-16 h-16 bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Safe & Secure</h3>
-                        <p class="text-gray-600">We prioritize the safety and comfort of both our clients and celebrity partners.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Safe & Secure</h3>
+                        <p class="text-gray-300">We prioritize the safety and comfort of both our clients and celebrity partners.</p>
                     </div>
                     
-                    <div class="bg-white p-6 rounded-xl shadow-md">
-                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <div class="bg-dark-600 p-6 rounded-xl shadow-md hover-lift">
+                        <div class="w-16 h-16 bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Exceptional Experiences</h3>
-                        <p class="text-gray-600">We strive to create memorable, high-quality experiences that exceed expectations for both fans and celebrities.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Exceptional Experiences</h3>
+                        <p class="text-gray-300">We strive to create memorable, high-quality experiences that exceed expectations for both fans and celebrities.</p>
                     </div>
                 </div>
             </div>
@@ -124,49 +134,49 @@
     </section>
     
     <!-- Team Section -->
-    <section class="py-16">
+    <section class="py-16 bg-dark-800">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-3xl mx-auto mb-12 animate-fade-in delay-300">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Meet Our Team</h2>
-                <p class="text-xl text-gray-600">
+                <h2 class="text-3xl font-bold text-white mb-4">Meet Our Team</h2>
+                <p class="text-xl text-gray-300">
                     Our dedicated team works tirelessly to create amazing experiences for our clients.
                 </p>
             </div>
             
             <div class="grid md:grid-cols-4 gap-8">
-                <div class="bg-white rounded-xl shadow-md overflow-hidden animate-fade-in delay-300">
+                <div class="bg-dark-700 rounded-xl shadow-md overflow-hidden hover-lift animate-fade-in delay-300">
                     <img src="https://via.placeholder.com/300x300?text=Team+Member" alt="Team Member" class="w-full h-64 object-cover">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-1">Jane Smith</h3>
-                        <p class="text-purple-600 mb-3">Founder & CEO</p>
-                        <p class="text-gray-600 text-sm">With over 15 years in the entertainment industry, Jane brings unparalleled expertise to Celebrity Meet & Greet.</p>
+                        <h3 class="text-xl font-semibold text-white mb-1">Jane Smith</h3>
+                        <p class="text-primary-400 mb-3">Founder & CEO</p>
+                        <p class="text-gray-300 text-sm">With over 15 years in the entertainment industry, Jane brings unparalleled expertise to Celebrity Meet & Greet.</p>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-xl shadow-md overflow-hidden animate-fade-in delay-400">
+                <div class="bg-dark-700 rounded-xl shadow-md overflow-hidden hover-lift animate-fade-in delay-400">
                     <img src="https://via.placeholder.com/300x300?text=Team+Member" alt="Team Member" class="w-full h-64 object-cover">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-1">John Davis</h3>
-                        <p class="text-purple-600 mb-3">Celebrity Relations</p>
-                        <p class="text-gray-600 text-sm">John manages our celebrity partnerships, ensuring a diverse roster of talent across various industries.</p>
+                        <h3 class="text-xl font-semibold text-white mb-1">John Davis</h3>
+                        <p class="text-primary-400 mb-3">Celebrity Relations</p>
+                        <p class="text-gray-300 text-sm">John manages our celebrity partnerships, ensuring a diverse roster of talent across various industries.</p>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-xl shadow-md overflow-hidden animate-fade-in delay-500">
+                <div class="bg-dark-700 rounded-xl shadow-md overflow-hidden hover-lift animate-fade-in delay-500">
                     <img src="https://via.placeholder.com/300x300?text=Team+Member" alt="Team Member" class="w-full h-64 object-cover">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-1">Sarah Johnson</h3>
-                        <p class="text-purple-600 mb-3">Customer Experience</p>
-                        <p class="text-gray-600 text-sm">Sarah ensures that every client receives personalized attention and an exceptional booking experience.</p>
+                        <h3 class="text-xl font-semibold text-white mb-1">Sarah Johnson</h3>
+                        <p class="text-primary-400 mb-3">Customer Experience</p>
+                        <p class="text-gray-300 text-sm">Sarah ensures that every client receives personalized attention and an exceptional booking experience.</p>
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-xl shadow-md overflow-hidden animate-fade-in delay-500">
+                <div class="bg-dark-700 rounded-xl shadow-md overflow-hidden hover-lift animate-fade-in delay-500">
                     <img src="https://via.placeholder.com/300x300?text=Team+Member" alt="Team Member" class="w-full h-64 object-cover">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-1">Michael Brown</h3>
-                        <p class="text-purple-600 mb-3">Event Coordinator</p>
-                        <p class="text-gray-600 text-sm">Michael handles the logistics of our meet and greet sessions, ensuring everything runs smoothly.</p>
+                        <h3 class="text-xl font-semibold text-white mb-1">Michael Brown</h3>
+                        <p class="text-primary-400 mb-3">Event Coordinator</p>
+                        <p class="text-gray-300 text-sm">Michael handles the logistics of our meet and greet sessions, ensuring everything runs smoothly.</p>
                     </div>
                 </div>
             </div>
@@ -174,17 +184,17 @@
     </section>
     
     <!-- Testimonials Section -->
-    <section class="py-16 bg-purple-50">
+    <section class="py-16 bg-dark-700">
         <div class="container mx-auto px-6">
             <div class="text-center max-w-3xl mx-auto mb-12 animate-fade-in delay-300">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">What People Say</h2>
-                <p class="text-xl text-gray-600">
+                <h2 class="text-3xl font-bold text-white mb-4">What People Say</h2>
+                <p class="text-xl text-gray-300">
                     Don't just take our word for it. Here's what our clients have to say about their experiences.
                 </p>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-md animate-fade-in delay-300">
+                <div class="bg-dark-600 p-6 rounded-xl shadow-md hover-lift animate-fade-in delay-300">
                     <div class="flex items-center mb-4">
                         <div class="flex text-yellow-400">
                             {% for i in "12345" %}
@@ -194,13 +204,13 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">
+                    <p class="text-gray-300 mb-4">
                         "Meeting my favorite actor was a dream come true! The booking process was so easy, and the experience was unforgettable."
                     </p>
-                    <p class="font-semibold text-gray-800">- Sarah Johnson</p>
+                    <p class="font-semibold text-white">- Sarah Johnson</p>
                 </div>
                 
-                <div class="bg-white p-6 rounded-xl shadow-md animate-fade-in delay-400">
+                <div class="bg-dark-600 p-6 rounded-xl shadow-md hover-lift animate-fade-in delay-400">
                     <div class="flex items-center mb-4">
                         <div class="flex text-yellow-400">
                             {% for i in "12345" %}
@@ -210,13 +220,13 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">
+                    <p class="text-gray-300 mb-4">
                         "I surprised my daughter with a meet and greet for her birthday. The team was professional, and the celebrity was so kind. Worth every penny!"
                     </p>
-                    <p class="font-semibold text-gray-800">- Robert Williams</p>
+                    <p class="font-semibold text-white">- Robert Williams</p>
                 </div>
                 
-                <div class="bg-white p-6 rounded-xl shadow-md animate-fade-in delay-500">
+                <div class="bg-dark-600 p-6 rounded-xl shadow-md hover-lift animate-fade-in delay-500">
                     <div class="flex items-center mb-4">
                         <div class="flex text-yellow-400">
                             {% for i in "12345" %}
@@ -226,36 +236,36 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">
+                    <p class="text-gray-300 mb-4">
                         "As a long-time fan, meeting my favorite musician was incredible. The session was private, well-organized, and everything I hoped for."
                     </p>
-                    <p class="font-semibold text-gray-800">- David Thompson</p>
+                    <p class="font-semibold text-white">- David Thompson</p>
                 </div>
             </div>
         </div>
     </section>
     
     <!-- CTA Section -->
-    <section class="py-16">
+    <section class="py-16 bg-dark-800">
         <div class="container mx-auto px-6">
-            <div class="bg-purple-600 rounded-2xl shadow-xl overflow-hidden animate-fade-in delay-300">
+            <div class="bg-gradient-to-r from-primary-600 to-accent-600 rounded-2xl shadow-xl overflow-hidden hover-lift animate-fade-in delay-300">
                 <div class="md:flex items-center">
                     <div class="md:w-2/3 p-8 md:p-12">
                         <h2 class="text-3xl font-bold text-white mb-4">Ready to Meet Your Favorite Celebrity?</h2>
-                        <p class="text-purple-100 mb-6">
+                        <p class="text-primary-100 mb-6">
                             Browse our roster of amazing celebrities and book your unforgettable meet and greet experience today.
                         </p>
-                        <a href="{% url 'home' %}" class="inline-block bg-white text-purple-600 hover:bg-purple-50 font-semibold py-3 px-8 rounded-lg transition-colors">
+                        <a href="{% url 'home' %}" class="inline-block bg-white text-primary-600 hover:bg-primary-50 font-semibold py-3 px-8 rounded-lg transition-colors">
                             Browse Celebrities
                         </a>
                     </div>
-                    <div class="md:w-1/3 bg-purple-700 p-8 md:p-12">
+                    <div class="md:w-1/3 bg-primary-700 p-8 md:p-12">
                         <div class="text-center">
                             <h3 class="text-xl font-semibold text-white mb-4">Have Questions?</h3>
-                            <p class="text-purple-100 mb-6">
+                            <p class="text-primary-100 mb-6">
                                 Our team is here to help you with any questions you may have about our services.
                             </p>
-                            <a href="{% url 'contact' %}" class="inline-block border-2 border-white text-white hover:bg-white hover:text-purple-700 font-semibold py-2 px-6 rounded-lg transition-colors">
+                            <a href="{% url 'contact' %}" class="inline-block border-2 border-white text-white hover:bg-white hover:text-primary-700 font-semibold py-2 px-6 rounded-lg transition-colors">
                                 Contact Us
                             </a>
                         </div>

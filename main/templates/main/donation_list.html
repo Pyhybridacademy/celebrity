@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}Donation List - Celebrity Meet & Greet{% endblock %}
+
+{% block content %}
+<div class="bg-dark-900 min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative py-16 bg-gradient-to-b from-dark-800 to-dark-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Our Generous Donors</h1>
+                <p class="text-xl text-gray-300 mb-8">Thank you to everyone who has contributed to our charitable causes</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-dark-800">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-dark-700 p-8 rounded-xl text-center">
+                    <div class="text-4xl font-bold text-primary-400 mb-2">${{ total_amount }}</div>
+                    <p class="text-gray-300">Total Donations</p>
+                </div>
+                
+                <div class="bg-dark-700 p-8 rounded-xl text-center">
+                    <div class="text-4xl font-bold text-primary-400 mb-2">{{ donation_count }}</div>
+                    <p class="text-gray-300">Number of Donations</p>
+                </div>
+                
+                <div class="bg-dark-700 p-8 rounded-xl text-center">
+                    <div class="text-4xl font-bold text-primary-400 mb-2">{{ charity_count }}</div>
+                    <p class="text-gray-300">Charities Supported</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation List Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Recent Donations</h2>
+            
+            <!-- Filter Options -->
+            <div class="mb-8 max-w-4xl mx-auto">
+                <form method="get" class="bg-dark-800 p-6 rounded-xl">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="charity" class="block text-gray-300 mb-2">Charity</label>
+                            <select name="charity" id="charity" class="w-full bg-dark-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-primary-500 focus:border-primary-500">
+                                <option value="">All Charities</option>
+                                {% for charity in charities %}
+                                <option value="{{ charity.id }}" {% if request.GET.charity == charity.id|stringformat:"s" %}selected{% endif %}>{{ charity.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="sort" class="block text-gray-300 mb-2">Sort By</label>
+                            <select name="sort" id="sort" class="w-full bg-dark-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-primary-500 focus:border-primary-500">
+                                <option value="recent" {% if request.GET.sort == 'recent' %}selected{% endif %}>Most Recent</option>
+                                <option value="amount_high" {% if request.GET.sort == 'amount_high' %}selected{% endif %}>Amount (High to Low)</option>
+                                <option value="amount_low" {% if request.GET.sort == 'amount_low' %}selected{% endif %}>Amount (Low to High)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Donations Table -->
+            <div class="max-w-4xl mx-auto bg-dark-800 rounded-xl overflow-hidden shadow-lg">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="bg-dark-700">
+                                <th class="px-6 py-4 text-left text-gray-300 font-semibold">Donor</th>
+                                <th class="px-6 py-4 text-left text-gray-300 font-semibold">Amount</th>
+                                <th class="px-6 py-4 text-left text-gray-300 font-semibold">Charity</th>
+                                <th class="px-6 py-4 text-left text-gray-300 font-semibold">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-dark-600">
+                            {% for donation in donations %}
+                            <tr class="hover:bg-dark-700 transition-colors">
+                                <td class="px-6 py-4 text-white">
+                                    {% if donation.anonymous %}
+                                    Anonymous
+                                    {% else %}
+                                    {{ donation.donor_name }}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-primary-400 font-medium">${{ donation.amount }}</td>
+                                <td class="px-6 py-4 text-white">{{ donation.charity.name }}</td>
+                                <td class="px-6 py-4 text-gray-400">{{ donation.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                                    No donations found matching your criteria.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                {% if donations.has_other_pages %}
+                <div class="px-6 py-4 bg-dark-700 border-t border-dark-600">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-gray-400">
+                                Showing {{ donations.start_index }} to {{ donations.end_index }} of {{ donations.paginator.count }} donations
+                            </span>
+                        </div>
+                        
+                        <div class="flex space-x-1">
+                            {% if donations.has_previous %}
+                            <a href="?page={{ donations.previous_page_number }}{% if request.GET.charity %}&charity={{ request.GET.charity }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" 
+                               class="px-3 py-1 bg-dark-600 hover:bg-dark-500 text-white rounded transition-colors">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            {% endif %}
+                            
+                            {% for i in donations.paginator.page_range %}
+                                {% if donations.number == i %}
+                                <span class="px-3 py-1 bg-primary-600 text-white rounded">{{ i }}</span>
+                                {% elif i > donations.number|add:'-3' and i < donations.number|add:'3' %}
+                                <a href="?page={{ i }}{% if request.GET.charity %}&charity={{ request.GET.charity }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" 
+                                   class="px-3 py-1 bg-dark-600 hover:bg-dark-500 text-white rounded transition-colors">
+                                    {{ i }}
+                                </a>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if donations.has_next %}
+                            <a href="?page={{ donations.next_page_number }}{% if request.GET.charity %}&charity={{ request.GET.charity }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" 
+                               class="px-3 py-1 bg-dark-600 hover:bg-dark-500 text-white rounded transition-colors">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-b from-dark-900 to-dark-800">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Join Our Community of Donors</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Your contribution, no matter the size, can make a meaningful impact.</p>
+            <a href="{% url 'donate_charity' %}" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-colors">
+                Make a Donation
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}
