@@ -144,3 +144,7 @@ STATICFILES_FINDERS = [
 
 
 LOGIN_URL = 'admin_login'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://celebrity-lq20.onrender.com',
+]
