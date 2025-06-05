@@ -1,0 +1,103 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Site Settings - Admin Panel{% endblock %}
+{% block header_title %}Site Settings{% endblock %}
+
+{% block content %}
+<div 
+    class="mb-8"
+    x-data="{ shown: false }"
+    x-init="setTimeout(() => shown = true, 100)"
+    :class="{ 'opacity-0 translate-y-4': !shown, 'opacity-100 translate-y-0': shown }"
+    class="transition-all duration-300"
+>
+    <h2 class="text-xl font-semibold text-gray-800">Manage Site Settings</h2>
+    <p class="text-gray-600 mt-1">Update contact and social media information for the platform</p>
+</div>
+
+<div 
+    class="bg-white rounded-xl shadow-sm p-6 card-hover"
+    x-data="{ shown: false }"
+    x-init="setTimeout(() => shown = true, 300)"
+    :class="{ 'opacity-0 translate-y-4': !shown, 'opacity-100 translate-y-0': shown }"
+    class="transition-all duration-500"
+>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for field in form %}
+            <div>
+                <label 
+                    for="{{ field.id_for_label }}" 
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                    {{ field.label }}
+                    {% if field.field.required %}
+                    <span class="text-red-500">*</span>
+                    {% endif %}
+                </label>
+                {% if field.name == 'logo' %}
+                <!-- File input for logo -->
+                <div class="relative">
+                    <input 
+                        type="file" 
+                        id="{{ field.id_for_label }}" 
+                        name="{{ field.name }}"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                        accept="image/*"
+                        {% if field.field.required %}required{% endif %}
+                        aria-label="Upload {{ field.label }}"
+                    >
+                    {% if field.value %}
+                    <p class="mt-2 text-sm text-gray-500">Current file: {{ field.value }}</p>
+                    {% endif %}
+                </div>
+                {% else %}
+                <!-- Text and other input fields -->
+                <input 
+                    type="{{ field.field.widget.input_type|default:'text' }}"
+                    id="{{ field.id_for_label }}"
+                    name="{{ field.name }}"
+                    value="{{ field.value|default_if_none:'' }}"
+                    class="block w-full rounded-lg border {% if field.errors %}border-red-500{% else %}border-gray-300{% endif %} bg-gray-50 px-4 py-2.5 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+                    placeholder="{{ field.label }}"
+                    {% if field.field.required %}required{% endif %}
+                    aria-label="{{ field.label }}"
+                >
+                {% endif %}
+                {% if field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ field.errors.as_text }}</p>
+                {% endif %}
+                {% if field.help_text %}
+                <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="flex justify-end space-x-3">
+            <a 
+                href="{% url 'admin_dashboard' %}" 
+                class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200 hover-scale"
+            >
+                Cancel
+            </a>
+            <button 
+                type="submit" 
+                class="inline-flex items-center justify-center px-8 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-lg hover:from-indigo-700 hover:to-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-500 transition-all duration-200 hover-scale"
+                aria-label="Save site settings"
+            >
+                Save Settings
+            </button>
+        </div>
+    </form>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('alpine:init', () => {
+        // Initialize any Alpine.js components for the form
+    });
+</script>
+{% endblock %}
+{% endblock %}

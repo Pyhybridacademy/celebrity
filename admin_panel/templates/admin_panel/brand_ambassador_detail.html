@@ -1,0 +1,101 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Brand Ambassador #{{ ambassador.id }} - Admin Panel{% endblock %}
+{% block header_title %}Brand Ambassador #{{ ambassador.id }}{% endblock %}
+
+{% block content %}
+<div class="mb-8 animate-fade-in">
+    <a href="{% url 'admin_brand_ambassador_list' %}" class="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to all ambassadors
+    </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden p-6 md:p-10 animate-slide-right">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Brand Ambassador #{{ ambassador.id }}</h1>
+        <span class="inline-block bg-indigo-50 text-indigo-700 text-sm font-semibold px-3 py-1 rounded mt-2">{{ ambassador.status|title }}</span>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div>
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Applicant Details</h2>
+            <p class="text-gray-600"><strong>Name:</strong> {{ ambassador.full_name }}</p>
+            <p class="text-gray-600"><strong>Email:</strong> {{ ambassador.email }}</p>
+            <p class="text-gray-600"><strong>Phone:</strong> {{ ambassador.phone_number }}</p>
+        </div>
+        
+        <div>
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Application Details</h2>
+            <p class="text-gray-600"><strong>Social Media:</strong> {{ ambassador.social_media|default:"N/A" }}</p>
+            <p class="text-gray-600"><strong>Amount:</strong> ${{ ambassador.amount }}</p>
+            <p class="text-gray-600"><strong>Created At:</strong> {{ ambassador.created_at|date:"M d, Y" }}</p>
+        </div>
+    </div>
+    
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">Payment Information</h2>
+        <p class="text-gray-600"><strong>Method:</strong> {{ ambassador.payment_method }}</p>
+        <p class="text-gray-600"><strong>Details:</strong> {{ ambassador.payment_details }}</p>
+        {% if ambassador.payment_proof %}
+        <p class="text-gray-600"><strong>Payment Proof:</strong></p>
+        <img src="{{ ambassador.payment_proof.url }}" alt="Payment Proof" class="w-48 mt-2">
+        {% endif %}
+    </div>
+    
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        <form method="post" action="{% url 'admin_update_brand_ambassador_status' ambassador.id %}">
+            {% csrf_token %}
+            <div class="flex items-center space-x-2">
+                <select name="status" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    {% for value, label in ambassador.STATUS_CHOICES %}
+                    <option value="{{ value }}" {% if ambassador.status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 to-indigo-700 p-0.5 text-sm font-medium text-white hover:text-white focus:outline-none focus:ring-4 focus:ring-indigo-500">
+                    <span class="relative rounded-full bg-white px-8 py-3.5 text-indigo-700 font-semibold text-lg">Update Status</span>
+                </button>
+            </div>
+        </form>
+        <a href="{% url 'admin_send_email_to_ambassador' ambassador.id %}" class="btn-primary hover-lift">
+            <span>Send Email</span>
+        </a>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-right');
+        animatedElements.forEach(el => {
+            el.style.opacity = '0';
+            el.classList.add('transition-opacity', 'duration-1000');
+            observer.observe(el);
+        });
+        
+        document.addEventListener('scroll', function() {
+            document.querySelectorAll('.visible').forEach(el => {
+                el.style.opacity = '1';
+            });
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

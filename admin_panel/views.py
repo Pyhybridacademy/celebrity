@@ -1,4 +1,3 @@
-# admin_panel/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -9,11 +8,13 @@ from django.conf import settings
 from django.db.models import Sum
 from main.models import (
     Celebrity, Reservation, PaymentMethod, CryptoWallet, 
-    MembershipTier, MembershipApplication, CharityDonation
+    MembershipTier, MembershipApplication, CharityDonation,
+    ModelingContract, BrandAmbassador, SiteSettings
 )
 from .forms import (
     CelebrityForm, ReservationForm, PaymentMethodForm, CryptoWalletForm,
-    MembershipTierForm, MembershipApplicationForm, CharityDonationForm, EmailForm
+    MembershipTierForm, MembershipApplicationForm, CharityDonationForm,
+    EmailForm, SiteSettingsForm
 )
 
 @login_required
@@ -21,19 +22,17 @@ def admin_dashboard(request):
     celebrities_count = Celebrity.objects.count()
     reservations_count = Reservation.objects.count()
     pending_reservations = Reservation.objects.filter(status='pending').count()
-    
-    # Membership stats
     membership_tiers_count = MembershipTier.objects.count()
     applications_count = MembershipApplication.objects.count()
     pending_applications = MembershipApplication.objects.filter(status='pending').count()
-    
-    # Donation stats
     donations_count = CharityDonation.objects.count()
     total_donations = CharityDonation.objects.filter(status='verified').aggregate(total=Sum('amount'))['total'] or 0
-    
-    # Payment methods stats
     payment_methods_count = PaymentMethod.objects.count()
     crypto_wallets_count = CryptoWallet.objects.count()
+    modeling_contracts_count = ModelingContract.objects.count()
+    pending_contracts = ModelingContract.objects.filter(status='pending').count()
+    ambassador_applications_count = BrandAmbassador.objects.count()
+    pending_ambassadors = BrandAmbassador.objects.filter(status='pending').count()
     
     context = {
         'celebrities_count': celebrities_count,
@@ -46,11 +45,14 @@ def admin_dashboard(request):
         'total_donations': total_donations,
         'payment_methods_count': payment_methods_count,
         'crypto_wallets_count': crypto_wallets_count,
+        'modeling_contracts_count': modeling_contracts_count,
+        'pending_contracts': pending_contracts,
+        'ambassador_applications_count': ambassador_applications_count,
+        'pending_ambassadors': pending_ambassadors,
     }
     
     return render(request, 'admin_panel/dashboard.html', context)
 
-# Celebrity views (existing)
 @login_required
 def celebrity_list(request):
     celebrities = Celebrity.objects.all().order_by('-created_at')
@@ -95,7 +97,6 @@ def delete_celebrity(request, celebrity_id):
     
     return render(request, 'admin_panel/delete_confirmation.html', {'celebrity': celebrity})
 
-# Reservation views (existing)
 @login_required
 def reservation_list(request):
     reservations = Reservation.objects.all().order_by('-created_at')
@@ -139,7 +140,6 @@ def update_reservation_status(request, reservation_id):
     
     return redirect('admin_reservation_list')
 
-# Payment Method views (new)
 @login_required
 def payment_method_list(request):
     payment_methods = PaymentMethod.objects.all()
@@ -188,7 +188,6 @@ def delete_payment_method(request, payment_method_id):
     
     return render(request, 'admin_panel/delete_confirmation.html', {'payment_method': payment_method})
 
-# Crypto Wallet views (new)
 @login_required
 def crypto_wallet_list(request):
     crypto_wallets = CryptoWallet.objects.all()
@@ -237,7 +236,6 @@ def delete_crypto_wallet(request, wallet_id):
     
     return render(request, 'admin_panel/delete_confirmation.html', {'wallet': wallet})
 
-# Membership Tier views (new)
 @login_required
 def membership_tier_list(request):
     tiers = MembershipTier.objects.all()
@@ -286,7 +284,6 @@ def delete_membership_tier(request, tier_id):
     
     return render(request, 'admin_panel/delete_confirmation.html', {'tier': tier})
 
-# Membership Application views (new)
 @login_required
 def membership_application_list(request):
     applications = MembershipApplication.objects.all().order_by('-created_at')
@@ -329,7 +326,6 @@ def update_membership_application_status(request, application_id):
     
     return redirect('admin_membership_application_list')
 
-# Charity Donation views (new)
 @login_required
 def charity_donation_list(request):
     donations = CharityDonation.objects.all().order_by('-created_at')
@@ -372,7 +368,105 @@ def update_charity_donation_status(request, donation_id):
     
     return redirect('admin_charity_donation_list')
 
-# Email functionality (existing)
+@login_required
+def modeling_contract_list(request):
+    contracts = ModelingContract.objects.all().order_by('-created_at')
+    return render(request, 'admin_panel/modeling_contract_list.html', {'contracts': contracts})
+
+@login_required
+def modeling_contract_detail(request, contract_id):
+    contract = get_object_or_404(ModelingContract, id=contract_id)
+    return render(request, 'admin_panel/modeling_contract_detail.html', {'contract': contract})
+
+@login_required
+def update_modeling_contract_status(request, contract_id):
+    contract = get_object_or_404(ModelingContract, id=contract_id)
+    
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in [choice[0] for choice in ModelingContract.STATUS_CHOICES]:
+            contract.status = new_status
+            contract.save()
+            
+            # Send status update email to user
+            subject = f'Update on your Modeling Contract Application'
+            html_message = render_to_string('admin_panel/emails/modeling_contract_status_update.html', {
+                'contract': contract,
+            })
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject,
+                plain_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [contract.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            
+            messages.success(request, f'Modeling contract status updated to {new_status}')
+        
+        return redirect('admin_modeling_contract_detail', contract_id=contract.id)
+    
+    return redirect('admin_modeling_contract_list')
+
+@login_required
+def brand_ambassador_list(request):
+    ambassadors = BrandAmbassador.objects.all().order_by('-created_at')
+    return render(request, 'admin_panel/brand_ambassador_list.html', {'ambassadors': ambassadors})
+
+@login_required
+def brand_ambassador_detail(request, ambassador_id):
+    ambassador = get_object_or_404(BrandAmbassador, id=ambassador_id)
+    return render(request, 'admin_panel/brand_ambassador_detail.html', {'ambassador': ambassador})
+
+@login_required
+def update_brand_ambassador_status(request, ambassador_id):
+    ambassador = get_object_or_404(BrandAmbassador, id=ambassador_id)
+    
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in [choice[0] for choice in BrandAmbassador.STATUS_CHOICES]:
+            ambassador.status = new_status
+            ambassador.save()
+            
+            # Send status update email to user
+            subject = f'Update on your Brand Ambassador Application'
+            html_message = render_to_string('admin_panel/emails/brand_ambassador_status_update.html', {
+                'ambassador': ambassador,
+            })
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject,
+                plain_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [ambassador.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            
+            messages.success(request, f'Brand ambassador status updated to {new_status}')
+        
+        return redirect('admin_brand_ambassador_detail', ambassador_id=ambassador.id)
+    
+    return redirect('admin_brand_ambassador_list')
+
+@login_required
+def site_settings(request):
+    settings_instance = SiteSettings.objects.first()
+    
+    if request.method == 'POST':
+        form = SiteSettingsForm(request.POST, request.FILES, instance=settings_instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Site settings updated successfully!')
+            return redirect('admin_dashboard')
+    else:
+        form = SiteSettingsForm(instance=settings_instance)
+    
+    return render(request, 'admin_panel/site_settings.html', {'form': form})
+
 @login_required
 def send_email(request, reservation_id=None):
     reservation = None
@@ -516,6 +610,104 @@ def send_email_to_donor(request, donation_id=None):
     context = {
         'form': form,
         'donation': donation,
+    }
+    
+    return render(request, 'admin_panel/send_email.html', context)
+
+@login_required
+def send_email_to_contract_applicant(request, contract_id=None):
+    contract = None
+    initial_data = {}
+    
+    if contract_id:
+        contract = get_object_or_404(ModelingContract, id=contract_id)
+        initial_data = {
+            'recipient_email': contract.email,
+            'subject': f'Regarding your Modeling Contract Application',
+        }
+    
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            recipient_email = form.cleaned_data['recipient_email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            
+            html_message = render_to_string('admin_panel/emails/custom_email.html', {
+                'message': message,
+                'contract': contract,
+            })
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject,
+                plain_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [recipient_email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            
+            messages.success(request, f'Email sent to {recipient_email} successfully!')
+            
+            if contract:
+                return redirect('admin_modeling_contract_detail', contract_id=contract.id)
+            return redirect('admin_dashboard')
+    else:
+        form = EmailForm(initial=initial_data)
+    
+    context = {
+        'form': form,
+        'contract': contract,
+    }
+    
+    return render(request, 'admin_panel/send_email.html', context)
+
+@login_required
+def send_email_to_ambassador(request, ambassador_id=None):
+    ambassador = None
+    initial_data = {}
+    
+    if ambassador_id:
+        ambassador = get_object_or_404(BrandAmbassador, id=ambassador_id)
+        initial_data = {
+            'recipient_email': ambassador.email,
+            'subject': f'Regarding your Brand Ambassador Application',
+        }
+    
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            recipient_email = form.cleaned_data['recipient_email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            
+            html_message = render_to_string('admin_panel/emails/custom_email.html', {
+                'message': message,
+                'ambassador': ambassador,
+            })
+            plain_message = strip_tags(html_message)
+            
+            send_mail(
+                subject,
+                plain_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [recipient_email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            
+            messages.success(request, f'Email sent to {recipient_email} successfully!')
+            
+            if ambassador:
+                return redirect('admin_brand_ambassador_detail', ambassador_id=ambassador.id)
+            return redirect('admin_dashboard')
+    else:
+        form = EmailForm(initial=initial_data)
+    
+    context = {
+        'form': form,
+        'ambassador': ambassador,
     }
     
     return render(request, 'admin_panel/send_email.html', context)

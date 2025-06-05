@@ -153,145 +153,191 @@
             </div>
             
             <!-- Navigation -->
-            <nav class="flex-1 py-4 overflow-y-auto">
-                <ul class="space-y-1 px-3">
-                    <li>
-                        <a href="{% url 'admin_dashboard' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if request.path == '/admin/' %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Dashboard
-                            </span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="{% url 'admin_celebrity_list' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/celebrities/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Celebrities
-                            </span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="{% url 'admin_reservation_list' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/reservations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Reservations
-                            </span>
-                        </a>
-                    </li>
+            <!-- Navigation -->
+<nav class="flex-1 py-4 overflow-y-auto">
+    <ul class="space-y-1 px-3">
+        <li>
+            <a href="{% url 'admin_dashboard' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if request.path == '/admin/' %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Dashboard
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a href="{% url 'admin_celebrity_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/celebrities/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Celebrities
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a href="{% url 'admin_reservation_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/reservations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Reservations
+                </span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="{% url 'admin_membership_tier_list' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/reservations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Membership Tiers
-                            </span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{% url 'admin_membership_tier_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/membership-tiers/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Membership Tiers
+                </span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="{% url 'admin_membership_application_list' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/reservations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Membership Applications
-                            </span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{% url 'admin_membership_application_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/membership-applications/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Membership Applications
+                </span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="{% url 'admin_charity_donation_list' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/reservations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Charity Donations
-                            </span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{% url 'admin_charity_donation_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/charity-donations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Charity Donations
+                </span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="{% url 'admin_payment_method_list' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/reservations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Payment Methods
-                            </span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{% url 'admin_payment_method_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/payment-methods/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Payment Methods
+                </span>
+            </a>
+        </li>
 
-                    <li>
-                        <a href="{% url 'admin_crypto_wallet_list' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/reservations/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Crypto Wallets
-                            </span>
-                        </a>
-                    </li>
+        <li>
+            <a href="{% url 'admin_crypto_wallet_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/crypto-wallets/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Crypto Wallets
+                </span>
+            </a>
+        </li>
 
-                    
-                    <li>
-                        <a href="{% url 'admin_send_email' %}" 
-                           class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/send-email/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            <span 
-                                :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
-                                class="transition-all duration-300 whitespace-nowrap font-medium"
-                            >
-                                Send Email
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        <li>
+            <a href="{% url 'admin_modeling_contract_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/modeling-contracts/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Modeling Contracts
+                </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'admin_brand_ambassador_list' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/brand-ambassadors/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Brand Ambassadors
+                </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'admin_site_settings' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/site-settings/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Site Settings
+                </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'admin_send_email' %}" 
+               class="flex items-center py-3 px-3 rounded-lg nav-link hover:bg-gray-100 {% if '/admin/send-email/' in request.path %}active bg-indigo-50 text-indigo-700{% else %}text-gray-700{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span 
+                    :class="{'opacity-0 ml-0': collapseSidebar, 'opacity-100 ml-3': !collapseSidebar}"
+                    class="transition-all duration-300 whitespace-nowrap font-medium"
+                >
+                    Send Email
+                </span>
+            </a>
+        </li>
+    </ul>
+</nav>
             
             <!-- Sidebar footer -->
             <div class="p-4 border-t border-gray-100">

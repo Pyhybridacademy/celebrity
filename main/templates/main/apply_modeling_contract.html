@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for Modeling Contract - Celebrity Meet & Greet{% endblock %}
+
+{% block extra_head %}
+<style>
+    .animate-fade-in {
+        opacity: 0;
+        animation: fadeIn 0.8s ease forwards;
+    }
+    
+    .animate-slide-right {
+        opacity: 0;
+        animation: slideInRight 0.8s ease forwards;
+    }
+    
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    
+    .decorative-blob {
+        position: absolute;
+        z-index: -1;
+        pointer-events: none;
+    }
+    
+    /* Improved form input styles */
+    .input-field {
+        transition: all 0.3s ease;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: #1f2937; /* bg-gray-700 */
+        border: 1px solid #374151; /* border-gray-600 */
+        border-radius: 0.5rem; /* rounded-lg */
+        color: white;
+        outline: none;
+    }
+    
+    .input-field:focus {
+        border-color: #6366f1; /* focus:ring-indigo-500 */
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+    
+    textarea.input-field {
+        min-height: 120px;
+    }
+    
+    select.input-field {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+    }
+    
+    .file-input-label {
+        display: block;
+        padding: 0.75rem 1rem;
+        background-color: #1f2937;
+        border: 1px dashed #374151;
+        border-radius: 0.5rem;
+        color: #9ca3af;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .file-input-label:hover {
+        border-color: #6366f1;
+        color: white;
+    }
+    
+    .file-input {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(to right, #4f46e5, #7c3aed); /* from-indigo-600 to-purple-600 */
+        color: white;
+        font-weight: 500;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(to right, #4338ca, #6d28d9); /* hover:from-indigo-700 hover:to-purple-700 */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="overflow-x-hidden">
+    <section class="relative py-12 bg-dark-900">
+        <div class="decorative-blob top-0 right-0 w-64 h-64 bg-primary-900 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+        <div class="decorative-blob bottom-0 left-0 w-64 h-64 bg-accent-900 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+        
+        <div class="container mx-auto px-6">
+            <div class="mb-8 animate-fade-in">
+                <a href="{% url 'home' %}" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+            
+            <div class="bg-dark-800 rounded-2xl shadow-xl overflow-hidden animate-slide-right p-6 md:p-10">
+                <h2 class="text-3xl font-bold text-white mb-6">Apply for Modeling Contract</h2>
+                
+                <form method="post" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {% for field in form %}
+                        <div>
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2">
+                                {{ field.label }} {% if field.field.required %}<span class="text-red-400">*</span>{% endif %}
+                            </label>
+                            
+                            {% if field.field.widget.input_type == 'file' %}
+                            <label for="{{ field.id_for_label }}" class="file-input-label">
+                                <span id="file-name-{{ field.id_for_label }}">Choose {{ field.label|lower }}</span>
+                                <input type="file" id="{{ field.id_for_label }}" name="{{ field.name }}" 
+                                       class="file-input" {% if field.field.required %}required{% endif %}
+                                       onchange="document.getElementById('file-name-{{ field.id_for_label }}').textContent = this.files[0]?.name || 'Choose {{ field.label|lower }}'">
+                            </label>
+                            {% elif field.field.widget.input_type == 'select' %}
+                            <select id="{{ field.id_for_label }}" name="{{ field.name }}"
+                                    class="input-field" {% if field.field.required %}required{% endif %}>
+                                {% for choice in field.field.choices %}
+                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            {% elif field.field.widget.input_type == 'textarea' %}
+                            <textarea id="{{ field.id_for_label }}" name="{{ field.name }}"
+                                      class="input-field" rows="5" 
+                                      {% if field.field.required %}required{% endif %}></textarea>
+                            {% else %}
+                            <input type="{{ field.field.widget.input_type }}" id="{{ field.id_for_label }}" 
+                                   name="{{ field.name }}" class="input-field"
+                                   {% if field.field.required %}required{% endif %}>
+                            {% endif %}
+                            
+                            {% if field.help_text %}
+                            <p class="mt-2 text-sm text-gray-400">{{ field.help_text }}</p>
+                            {% endif %}
+                            
+                            {% if field.errors %}
+                            <p class="mt-2 text-sm text-red-400">{{ field.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-white mb-4">Payment Options</h3>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-medium text-gray-300 mb-3">Cryptocurrency Wallets</h4>
+                            {% for wallet in crypto_wallets %}
+                            <div class="flex items-center mb-4">
+                                <div>
+                                    <p class="text-gray-300"><strong>{{ wallet.currency }}:</strong> {{ wallet.wallet_address }}</p>
+                                    {% if wallet.qr_code %}
+                                    <img src="{{ wallet.qr_code.url }}" alt="{{ wallet.currency }} QR Code" class="w-24 h-24 mt-2">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-gray-400">No active cryptocurrency wallets available.</p>
+                            {% endfor %}
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-medium text-gray-300 mb-3">Other Payment Methods</h4>
+                            {% for method in payment_methods %}
+                            <p class="text-gray-300 mb-2"><strong>{{ method.name }}:</strong> {{ method.instructions }}</p>
+                            {% empty %}
+                            <p class="text-gray-400">No active payment methods available.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn-primary hover-lift">
+                            <span>Submit Application</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-right');
+        animatedElements.forEach(el => {
+            el.style.opacity = '0';
+            el.classList.add('transition-opacity', 'duration-1000');
+            observer.observe(el);
+        });
+        
+        document.addEventListener('scroll', function() {
+            document.querySelectorAll('.visible').forEach(el => {
+                el.style.opacity = '1';
+            });
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,8 +1,8 @@
-# admin_panel/forms.py
 from django import forms
 from main.models import (
     Celebrity, Reservation, PaymentMethod, CryptoWallet, 
-    MembershipTier, MembershipApplication, CharityDonation
+    MembershipTier, MembershipApplication, CharityDonation,
+    ModelingContract, BrandAmbassador, SiteSettings
 )
 
 class CelebrityForm(forms.ModelForm):
@@ -65,6 +65,34 @@ class CharityDonationForm(forms.ModelForm):
         widgets = {
             'payment_details': forms.Textarea(attrs={'rows': 3}),
             'message': forms.Textarea(attrs={'rows': 3}),
+        }
+
+class ModelingContractForm(forms.ModelForm):
+    class Meta:
+        model = ModelingContract
+        fields = ['full_name', 'email', 'phone_number', 'portfolio', 
+                  'payment_method', 'payment_proof', 'payment_details', 'amount', 'status']
+        widgets = {
+            'portfolio': forms.Textarea(attrs={'rows': 3}),
+            'payment_details': forms.Textarea(attrs={'rows': 3}),
+        }
+
+class BrandAmbassadorForm(forms.ModelForm):
+    class Meta:
+        model = BrandAmbassador
+        fields = ['full_name', 'email', 'phone_number', 'social_media', 
+                  'payment_method', 'payment_proof', 'payment_details', 'amount', 'status']
+        widgets = {
+            'social_media': forms.Textarea(attrs={'rows': 3}),
+            'payment_details': forms.Textarea(attrs={'rows': 3}),
+        }
+
+class SiteSettingsForm(forms.ModelForm):
+    class Meta:
+        model = SiteSettings
+        fields = ['site_name', 'logo', 'contact_email', 'address', 'phone_number', 'Telegram']
+        widgets = {
+            'address': forms.Textarea(attrs={'rows': 3}),
         }
 
 class EmailForm(forms.Form):

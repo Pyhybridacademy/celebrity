@@ -122,3 +122,83 @@ class CharityDonation(models.Model):
     
     def __str__(self):
         return f"{self.donor_name} - ${self.amount}"
+
+class ModelingContract(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    )
+    
+    PAYMENT_METHOD_CHOICES = (
+        ('crypto', 'Cryptocurrency'),
+        ('giftcard', 'Gift Card'),
+    )
+    
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    portfolio = models.TextField(blank=True, null=True, help_text="Link to portfolio or description")
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
+    payment_proof = models.ImageField(upload_to='contract_proofs/')
+    payment_details = models.TextField(help_text="Transaction ID or gift card details")
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.full_name} - Modeling Contract"
+
+class BrandAmbassador(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    )
+    
+    PAYMENT_METHOD_CHOICES = (
+        ('crypto', 'Cryptocurrency'),
+        ('giftcard', 'Gift Card'),
+    )
+    
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    social_media = models.TextField(blank=True, null=True, help_text="Links to social media profiles")
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
+    payment_proof = models.ImageField(upload_to='ambassador_proofs/')
+    payment_details = models.TextField(help_text="Transaction ID or gift card details")
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.full_name} - Brand Ambassador"
+
+class SiteSettings(models.Model):
+    site_name = models.CharField(max_length=100, default="My Celebrity Site")
+    logo = models.ImageField(upload_to='site_logos/', blank=True, null=True)
+    contact_email = models.EmailField()
+    address = models.TextField()
+    phone_number = models.CharField(max_length=20)
+    Telegram = models.CharField(max_length=100, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.site_name
+
+    class Meta:
+        verbose_name = "Site Settings"
+        verbose_name_plural = "Site Settings"
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.name} - {self.subject}"

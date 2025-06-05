@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply to Become a Brand Ambassador{% endblock %}
+
+{% block extra_head %}
+<style>
+    .form-section {
+        transition: all 0.3s ease;
+        background-color: #1f2937;
+        border-radius: 0.5rem;
+    }
+    
+    .form-section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .input-field {
+        transition: all 0.3s ease;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 0.5rem;
+        color: white;
+        outline: none;
+    }
+    
+    .input-field:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+    
+    textarea.input-field {
+        min-height: 120px;
+    }
+    
+    select.input-field {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+    }
+    
+    .payment-option {
+        border-left: 3px solid transparent;
+        transition: all 0.3s ease;
+        background-color: #1f2937;
+        border-radius: 0.5rem;
+    }
+    
+    .payment-option:hover {
+        border-left-color: #6366f1;
+        background-color: rgba(99, 102, 241, 0.1);
+    }
+    
+    .file-upload {
+        border: 2px dashed #4b5563;
+        transition: all 0.3s ease;
+        background-color: #1f2937;
+    }
+    
+    .file-upload:hover {
+        border-color: #6366f1;
+        background-color: rgba(99, 102, 241, 0.1);
+    }
+    
+    .qr-code {
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        transition: transform 0.3s ease;
+    }
+    
+    .qr-code:hover {
+        transform: scale(1.05);
+    }
+    
+    .btn-submit {
+        background: linear-gradient(to right, #4f46e5, #7c3aed);
+        color: white;
+        font-weight: 500;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        background: linear-gradient(to right, #4338ca, #6d28d9);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transform: translateY(-2px);
+    }
+    
+    .currency-icon {
+        background-color: rgba(99, 102, 241, 0.2);
+        color: #818cf8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-dark-900">
+    <div class="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <a href="{% url 'home' %}" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium transition-colors duration-200">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back to Home
+            </a>
+        </div>
+        
+        <div class="bg-dark-800 shadow-xl rounded-lg overflow-hidden">
+            <div class="p-6 sm:p-8 md:p-10 bg-gradient-to-r from-primary-600 to-purple-600">
+                <h1 class="text-3xl font-bold text-white">Brand Ambassador Application</h1>
+                <p class="mt-2 text-primary-100">Join our team and represent our brand with style and passion</p>
+            </div>
+            
+            <div class="p-6 sm:p-8 md:p-10">
+                <form method="post" enctype="multipart/form-data" class="space-y-8">
+                    {% csrf_token %}
+                    
+                    <!-- Personal Information Section -->
+                    <div class="form-section p-6">
+                        <h2 class="text-xl font-semibold text-white mb-6">Personal Information</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="{{ form.full_name.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+                                    Full Name <span class="text-red-400">*</span>
+                                </label>
+                                <input type="text" id="{{ form.full_name.id_for_label }}" name="{{ form.full_name.name }}"
+                                       class="input-field"
+                                       placeholder="John Doe" required>
+                                {% if form.full_name.errors %}
+                                <p class="mt-1 text-sm text-red-400">{{ form.full_name.errors.as_text }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+                                    Email <span class="text-red-400">*</span>
+                                </label>
+                                <input type="email" id="{{ form.email.id_for_label }}" name="{{ form.email.name }}"
+                                       class="input-field"
+                                       placeholder="your@email.com" required>
+                                {% if form.email.errors %}
+                                <p class="mt-1 text-sm text-red-400">{{ form.email.errors.as_text }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+                                    Phone Number <span class="text-red-400">*</span>
+                                </label>
+                                <input type="tel" id="{{ form.phone_number.id_for_label }}" name="{{ form.phone_number.name }}"
+                                       class="input-field"
+                                       placeholder="+1 (555) 123-4567" required>
+                                {% if form.phone_number.errors %}
+                                <p class="mt-1 text-sm text-red-400">{{ form.phone_number.errors.as_text }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.social_media.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+                                    Social Media Links <span class="text-red-400">*</span>
+                                </label>
+                                <textarea id="{{ form.social_media.id_for_label }}" name="{{ form.social_media.name }}"
+                                          class="input-field"
+                                          rows="3" placeholder="Instagram: @yourhandle\nTikTok: @yourhandle" required></textarea>
+                                {% if form.social_media.errors %}
+                                <p class="mt-1 text-sm text-red-400">{{ form.social_media.errors.as_text }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Information Section -->
+                    <div class="form-section p-6">
+                        <h2 class="text-xl font-semibold text-white mb-6">Payment Information</h2>
+                        
+                        <div class="mb-6">
+                            <label for="{{ form.amount.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+                                Application Fee Amount <span class="text-red-400">*</span>
+                            </label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-400 sm:text-sm">$</span>
+                                </div>
+                                <input type="number" id="{{ form.amount.id_for_label }}" name="{{ form.amount.name }}"
+                                       class="input-field block w-full pl-7 pr-12"
+                                       placeholder="0.00" required>
+                                <div class="absolute inset-y-0 right-0 flex items-center">
+                                    <span class="text-gray-400 sm:text-sm mr-3">USD</span>
+                                </div>
+                            </div>
+                            {% if form.amount.errors %}
+                            <p class="mt-1 text-sm text-red-400">{{ form.amount.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="{{ form.payment_method.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+                                Payment Method <span class="text-red-400">*</span>
+                            </label>
+                            <select id="{{ form.payment_method.id_for_label }}" name="{{ form.payment_method.name }}"
+                                    class="input-field" required>
+                                <option value="" disabled selected>Select payment method</option>
+                                <option value="crypto">Cryptocurrency</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="other">Other</option>
+                            </select>
+                            {% if form.payment_method.errors %}
+                            <p class="mt-1 text-sm text-red-400">{{ form.payment_method.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="{{ form.payment_details.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
+                                Payment Details <span class="text-red-400">*</span>
+                            </label>
+                            <textarea id="{{ form.payment_details.id_for_label }}" name="{{ form.payment_details.name }}"
+                                      class="input-field"
+                                      rows="3" placeholder="Transaction ID, wallet address, or other payment details" required></textarea>
+                            {% if form.payment_details.errors %}
+                            <p class="mt-1 text-sm text-red-400">{{ form.payment_details.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                Payment Proof <span class="text-red-400">*</span>
+                            </label>
+                            <div class="file-upload mt-1 flex justify-center px-6 pt-5 pb-6 rounded-md">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-400">
+                                        <label for="{{ form.payment_proof.id_for_label }}" class="relative cursor-pointer rounded-md font-medium text-primary-400 hover:text-primary-300 focus-within:outline-none">
+                                            <span>Upload a file</span>
+                                            <input id="{{ form.payment_proof.id_for_label }}" name="{{ form.payment_proof.name }}" type="file" class="sr-only" required>
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">
+                                        PNG, JPG, PDF up to 5MB
+                                    </p>
+                                </div>
+                            </div>
+                            {% if form.payment_proof.errors %}
+                            <p class="mt-1 text-sm text-red-400">{{ form.payment_proof.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Options Section -->
+                    <div class="form-section p-6">
+                        <h2 class="text-xl font-semibold text-white mb-6">Available Payment Options</h2>
+                        
+                        <div class="space-y-6">
+                            <!-- Cryptocurrency Options -->
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-4">Cryptocurrency Payments</h3>
+                                
+                                {% if crypto_wallets %}
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {% for wallet in crypto_wallets %}
+                                    <div class="payment-option p-4">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10 rounded-full currency-icon flex items-center justify-center">
+                                                <span class="font-bold">{{ wallet.currency|slice:":3" }}</span>
+                                            </div>
+                                            <div class="ml-4">
+                                                <h4 class="text-sm font-medium text-white">{{ wallet.currency }}</h4>
+                                                <p class="text-sm text-gray-400 break-all">{{ wallet.wallet_address }}</p>
+                                            </div>
+                                        </div>
+                                        {% if wallet.qr_code %}
+                                        <div class="mt-4 flex justify-center">
+                                            <img src="{{ wallet.qr_code.url }}" alt="{{ wallet.currency }} QR Code" class="qr-code h-32 w-32">
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="text-gray-400">No cryptocurrency wallets currently available.</p>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Other Payment Options -->
+                            <div>
+                                <h3 class="text-lg font-medium text-white mb-4">Other Payment Methods</h3>
+                                
+                                {% if payment_methods %}
+                                <div class="space-y-4">
+                                    {% for method in payment_methods %}
+                                    <div class="payment-option p-4">
+                                        <h4 class="text-sm font-medium text-white">{{ method.name }}</h4>
+                                        <p class="mt-1 text-sm text-gray-400">{{ method.instructions }}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="text-gray-400">No other payment methods currently available.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Submission -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-gray-700">
+                        <div class="mb-4 sm:mb-0">
+                            <p class="text-sm text-gray-400">
+                                By submitting this application, you agree to our <a href="#" class="text-primary-400 hover:text-primary-300">Terms of Service</a> and <a href="#" class="text-primary-400 hover:text-primary-300">Privacy Policy</a>.
+                            </p>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            Submit Application
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

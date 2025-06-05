@@ -21,10 +21,14 @@
         to { opacity: 1; transform: translateX(0); }
     }
     
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
     }
     
     .animate-fade-in {
@@ -42,8 +46,12 @@
         animation: slideInLeft 0.8s ease forwards;
     }
     
-    .animate-pulse {
-        animation: pulse 2s infinite;
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .animate-glow {
+        animation: glow 2s ease-in-out infinite;
     }
     
     .delay-100 { animation-delay: 0.1s; }
@@ -61,8 +69,8 @@
     }
     
     .hover-lift:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
     }
     
     .hover-scale {
@@ -70,12 +78,12 @@
     }
     
     .hover-scale:hover {
-        transform: scale(1.03);
+        transform: scale(1.05);
     }
     
     /* Gradient text */
     .gradient-text {
-        background: linear-gradient(to right, #10B981, #F59E0B);
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -84,9 +92,9 @@
     
     /* Glass effect */
     .glass-effect {
-        background: rgba(30, 30, 30, 0.5);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(26, 26, 46, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
@@ -95,118 +103,247 @@
         border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
     }
     
-    /* Fix for horizontal scrollbar */
-    body {
-        overflow-x: hidden;
+    /* Advertisement styles */
+    .ad-banner {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        transition: all 0.3s ease;
     }
     
-    /* Ensure decorative elements don't cause overflow */
+    .ad-banner:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+        border-color: rgba(59, 130, 246, 0.4);
+        transform: translateY(-2px);
+    }
+    
+    /* Stats counter animation */
+    .stat-number {
+        font-variant-numeric: tabular-nums;
+    }
+    
+    /* Decorative elements */
     .decorative-blob {
         position: absolute;
         z-index: -1;
         pointer-events: none;
+        filter: blur(40px);
+        opacity: 0.3;
+    }
+    
+    /* Responsive video container */
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+    
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Page Loader -->
-<div id="page-loader" class="fixed inset-0 z-50 flex items-center justify-center bg-dark-900">
-    <div class="flex flex-col items-center">
-        <div class="relative w-24 h-24">
-            <div class="absolute top-0 left-0 w-full h-full border-8 border-primary-800 rounded-full"></div>
-            <div class="absolute top-0 left-0 w-full h-full border-8 border-transparent border-t-primary-500 rounded-full animate-spin"></div>
-        </div>
-        <p class="mt-4 text-lg font-medium text-primary-400">Loading amazing experiences...</p>
-    </div>
-</div>
-
 <div class="space-y-24">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-dark-900">
+    <section class="relative overflow-hidden min-h-screen flex items-center">
         <!-- Background decorative elements -->
-        <div class="decorative-blob top-0 right-0 w-96 h-96 bg-primary-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div class="decorative-blob bottom-0 left-0 w-96 h-96 bg-accent-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="decorative-blob top-0 right-0 w-96 h-96 bg-primary-600 rounded-full"></div>
+        <div class="decorative-blob bottom-0 left-0 w-96 h-96 bg-accent-600 rounded-full"></div>
+        <div class="decorative-blob top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-secondary-600 rounded-full"></div>
         
-        <div class="container relative mx-auto px-6 py-24 md:py-32">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="container relative mx-auto px-6 py-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="space-y-8 animate-slide-left">
-                    <span class="inline-block px-4 py-2 rounded-full bg-primary-900 text-primary-300 font-semibold text-sm">Exclusive Experiences</span>
-                    <h1 class="text-5xl md:text-6xl font-bold leading-tight text-white">Meet Your Favorite Celebrities</h1>
-                    <p class="text-xl text-gray-300">Book a personal meet and greet session with the stars you admire. Create memories that last a lifetime.</p>
+                    <div class="flex items-center space-x-2">
+                        <span class="inline-block px-4 py-2 rounded-full glass-effect text-primary-300 font-semibold text-sm animate-glow">
+                            ✨ Exclusive Experiences
+                        </span>
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-accent-500 rounded-full animate-pulse delay-100"></div>
+                            <div class="w-2 h-2 bg-secondary-500 rounded-full animate-pulse delay-200"></div>
+                        </div>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold font-poppins leading-tight">
+                        <span class="text-white">Meet Your</span>
+                        <br>
+                        <span class="gradient-text">Favorite</span>
+                        <br>
+                        <span class="text-white">Celebrities</span>
+                    </h1>
+                    <p class="text-xl text-gray-300 leading-relaxed">
+                        Book a personal meet and greet session with the stars you admire. Create memories that last a lifetime with our exclusive celebrity experiences.
+                    </p>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 py-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary-400 stat-number" data-count="500">0</div>
+                            <div class="text-sm text-gray-400">Celebrities</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-accent-400 stat-number" data-count="10000">0</div>
+                            <div class="text-sm text-gray-400">Happy Clients</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-secondary-400 stat-number" data-count="50">0</div>
+                            <div class="text-sm text-gray-400">Cities</div>
+                        </div>
+                    </div>
+                    
                     <div class="pt-4 flex flex-wrap gap-4">
-                        <a href="{% url 'celebrity_list' %}" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-primary-500 to-accent-500 p-0.5 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-primary-800">
-                            <span class="relative rounded-full bg-dark-800 px-6 py-3.5 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-white font-semibold text-lg group-hover:text-white">
-                                Browse Celebrities
+                        <a href="{% url 'celebrity_list' %}" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full gradient-bg p-0.5 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-primary-800 hover-scale">
+                            <span class="relative rounded-full bg-dark-800 px-8 py-4 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-white font-semibold text-lg group-hover:text-white">
+                                🌟 Browse Celebrities
                             </span>
                         </a>
-                        <a href="#how-it-works" class="inline-flex items-center justify-center px-6 py-3.5 border-2 border-primary-500 text-primary-400 hover:bg-primary-900 hover:text-white rounded-full font-semibold text-lg transition-colors">
-                            How It Works
+                        <a href="#how-it-works" class="inline-flex items-center justify-center px-8 py-4 border-2 border-primary-500 text-primary-400 hover:bg-primary-900 hover:text-white rounded-full font-semibold text-lg transition-all hover-scale">
+                            📖 How It Works
                         </a>
                     </div>
                 </div>
+                
                 <div class="relative animate-slide-right">
-                    <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-accent-600 rounded-3xl transform rotate-3 scale-105"></div>
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80" alt="Celebrity Meet and Greet" class="relative rounded-3xl shadow-xl transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+                    <div class="absolute inset-0 gradient-bg rounded-3xl transform rotate-3 scale-105 animate-float"></div>
+                    <img src="https://wallpapers.com/images/featured/bts-pictures-0ynzwrpbewd63qlf.jpg" 
+                         alt="Celebrity Meet and Greet" 
+                         class="relative rounded-3xl shadow-2xl transform -rotate-3 hover:rotate-0 transition-transform duration-500 hover-scale">
                 </div>
             </div>
         </div>
         
         <!-- Scroll indicator -->
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg class="w-10 h-10 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-10 h-10 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
             </svg>
         </div>
     </section>
     
+    <!-- Advertisement Banner 1 -->
+    <section class="py-8">
+        <div class="container mx-auto px-6">
+            <div class="ad-banner rounded-2xl p-8 md:p-12 overflow-hidden relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <h3 class="text-2xl md:text-3xl font-bold text-white font-poppins">
+                            🎬 Exclusive Movie Premiere Access
+                        </h3>
+                        <p class="text-gray-300 text-lg">
+                            Get VIP access to movie premieres and red carpet events. Meet A-list celebrities and experience Hollywood glamour like never before.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-primary-400 hover:text-primary-300 font-semibold transition-colors">
+                            Learn More 
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <img src="https://variety.com/wp-content/uploads/2019/05/rexfeatures_10222623ax-e1557432416915.jpg?w=1000&h=587&crop=1" 
+                             alt="Movie Premiere" 
+                             class="rounded-xl shadow-lg hover-scale">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- How It Works Section -->
-    <section id="how-it-works" class="py-20 relative bg-dark-800">
+    <section id="how-it-works" class="py-20 relative">
         <!-- Background decorative elements -->
-        <div class="decorative-blob top-1/2 right-0 w-64 h-64 bg-primary-900 shape-blob mix-blend-multiply filter blur-xl opacity-20"></div>
-        <div class="decorative-blob top-1/4 left-0 w-64 h-64 bg-accent-900 shape-blob mix-blend-multiply filter blur-xl opacity-20"></div>
+        <div class="decorative-blob top-1/2 right-0 w-64 h-64 bg-primary-600 shape-blob"></div>
+        <div class="decorative-blob top-1/4 left-0 w-64 h-64 bg-accent-600 shape-blob"></div>
         
         <div class="container mx-auto px-6">
             <div class="text-center mb-16 animate-fade-in">
-                <span class="inline-block px-4 py-2 rounded-full bg-primary-900 text-primary-300 font-semibold text-sm mb-4">Simple Process</span>
-                <h2 class="text-4xl font-bold text-white mb-4">How It Works</h2>
+                <span class="inline-block px-4 py-2 rounded-full glass-effect text-primary-300 font-semibold text-sm mb-4">
+                    🚀 Simple Process
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-poppins text-white mb-4">How It Works</h2>
                 <p class="text-xl text-gray-300 max-w-3xl mx-auto">Follow these simple steps to meet your favorite celebrities</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-dark-700 p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-100">
-                    <div class="bg-primary-900 text-primary-400 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 transform -rotate-6">
+                <div class="glass-effect p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-primary-500 to-accent-500 rounded-bl-full opacity-20"></div>
+                    <div class="gradient-bg text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 transform -rotate-6 animate-float">
                         <span class="text-3xl font-bold">1</span>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4 text-center text-white">Browse Celebrities</h3>
-                    <p class="text-gray-300 text-center">Explore our roster of available celebrities and find your favorite stars. Filter by category to find exactly who you're looking for.</p>
+                    <h3 class="text-2xl font-semibold mb-4 text-center text-white font-poppins">🔍 Browse Celebrities</h3>
+                    <p class="text-gray-300 text-center leading-relaxed">
+                        Explore our roster of available celebrities and find your favorite stars. Filter by category, location, and availability to find exactly who you're looking for.
+                    </p>
                 </div>
                 
-                <div class="bg-dark-700 p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-300">
-                    <div class="bg-primary-900 text-primary-400 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div class="glass-effect p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-accent-500 to-secondary-500 rounded-bl-full opacity-20"></div>
+                    <div class="gradient-bg text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 animate-float delay-200">
                         <span class="text-3xl font-bold">2</span>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4 text-center text-white">Book a Session</h3>
-                    <p class="text-gray-300 text-center">Select a date and time that works for you and complete the booking process. Secure your spot with our easy payment system.</p>
+                    <h3 class="text-2xl font-semibold mb-4 text-center text-white font-poppins">📅 Book a Session</h3>
+                    <p class="text-gray-300 text-center leading-relaxed">
+                        Select a date and time that works for you and complete the booking process. Secure your spot with our easy payment system and instant confirmation.
+                    </p>
                 </div>
                 
-                <div class="bg-dark-700 p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-500">
-                    <div class="bg-primary-900 text-primary-400 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-6">
+                <div class="glass-effect p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-secondary-500 to-primary-500 rounded-bl-full opacity-20"></div>
+                    <div class="gradient-bg text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 transform rotate-6 animate-float delay-400">
                         <span class="text-3xl font-bold">3</span>
                     </div>
-                    <h3 class="text-2xl font-semibold mb-4 text-center text-white">Meet & Greet</h3>
-                    <p class="text-gray-300 text-center">Enjoy your personal meet and greet session with your chosen celebrity. Take photos, get autographs, and create lasting memories.</p>
+                    <h3 class="text-2xl font-semibold mb-4 text-center text-white font-poppins">🤝 Meet & Greet</h3>
+                    <p class="text-gray-300 text-center leading-relaxed">
+                        Enjoy your personal meet and greet session with your chosen celebrity. Take photos, get autographs, and create lasting memories.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Advertisement Banner 2 -->
+    <section class="py-8">
+        <div class="container mx-auto px-6">
+            <div class="ad-banner rounded-2xl p-8 md:p-12 overflow-hidden relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="relative order-2 md:order-1">
+                        <img src="https://www.hollywoodreporter.com/wp-content/uploads/2020/08/viacomcbs-mtv-vmas2020-BTS3-copy-1598836170.jpg?w=1296&h=730&crop=1" 
+                             alt="Music Concert" 
+                             class="rounded-xl shadow-lg hover-scale">
+                    </div>
+                    <div class="space-y-4 order-1 md:order-2">
+                        <h3 class="text-2xl md:text-3xl font-bold text-white font-poppins">
+                            🎵 Backstage Concert Passes
+                        </h3>
+                        <p class="text-gray-300 text-lg">
+                            Experience the thrill of meeting your favorite musicians backstage. Get exclusive access to concerts and private meet & greet sessions.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-accent-400 hover:text-accent-300 font-semibold transition-colors">
+                            Explore Now 
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
     
     <!-- Featured Celebrities Section -->
-    <section id="celebrities" class="py-20 bg-dark-700">
+    <section id="celebrities" class="py-20 relative">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16 animate-fade-in">
-                <span class="inline-block px-4 py-2 rounded-full bg-primary-900 text-primary-300 font-semibold text-sm mb-4">Star-Studded Lineup</span>
-                <h2 class="text-4xl font-bold text-white mb-4">Featured Celebrities</h2>
+                <span class="inline-block px-4 py-2 rounded-full glass-effect text-primary-300 font-semibold text-sm mb-4">
+                    ⭐ Star-Studded Lineup
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-poppins text-white mb-4">Featured Celebrities</h2>
                 <p class="text-xl text-gray-300 max-w-3xl mx-auto">Book a session with these amazing personalities</p>
             </div>
             
@@ -214,21 +351,25 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for celebrity in celebrities %}
                 <div class="animate-fade-in delay-{{ forloop.counter|add:"100" }}">
-                    <div class="bg-dark-600 rounded-2xl shadow-xl overflow-hidden hover-lift h-full">
-                        <div class="h-72 overflow-hidden">
+                    <div class="glass-effect rounded-2xl shadow-xl overflow-hidden hover-lift h-full relative group">
+                        <div class="absolute inset-0 gradient-bg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                        <div class="h-72 overflow-hidden relative">
                             {% if celebrity.image %}
                             <img src="{{ celebrity.image.url }}" alt="{{ celebrity.name }}" class="w-full h-full object-cover transform hover-scale transition-transform duration-700">
                             {% else %}
-                            <img src="https://via.placeholder.com/400x300?text=No+Image" alt="{{ celebrity.name }}" class="w-full h-full object-cover transform hover-scale transition-transform duration-700">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300&q=80" alt="{{ celebrity.name }}" class="w-full h-full object-cover transform hover-scale transition-transform duration-700">
                             {% endif %}
+                            <div class="absolute top-4 right-4 bg-gradient-to-r from-primary-500 to-accent-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                Available
+                            </div>
                         </div>
                         <div class="p-8">
-                            <h3 class="text-2xl font-semibold mb-3 text-white">{{ celebrity.name }}</h3>
-                            <p class="text-gray-300 mb-6 line-clamp-3">{{ celebrity.bio|truncatechars:100 }}</p>
+                            <h3 class="text-2xl font-semibold mb-3 text-white font-poppins">{{ celebrity.name }}</h3>
+                            <p class="text-gray-300 mb-6 line-clamp-3 leading-relaxed">{{ celebrity.bio|truncatechars:100 }}</p>
                             <div class="flex justify-between items-center">
-                                <span class="text-primary-400 font-semibold text-xl">${{ celebrity.hourly_rate }}/hour</span>
-                                <a href="{% url 'celebrity_detail' celebrity.id %}" class="relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-primary-500 to-accent-500 p-0.5 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-primary-800">
-                                    <span class="relative rounded-full bg-dark-700 px-5 py-2.5 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-white font-semibold group-hover:text-white">
+                                <span class="text-primary-400 font-bold text-xl">${{ celebrity.hourly_rate }}/hour</span>
+                                <a href="{% url 'celebrity_detail' celebrity.id %}" class="relative inline-flex items-center justify-center overflow-hidden rounded-full gradient-bg p-0.5 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-primary-800 hover-scale">
+                                    <span class="relative rounded-full bg-dark-700 px-6 py-3 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-white font-semibold group-hover:text-white">
                                         View Profile
                                     </span>
                                 </a>
@@ -239,123 +380,760 @@
                 {% endfor %}
             </div>
             {% else %}
-            <div class="text-center py-12 bg-dark-600 rounded-2xl shadow-md">
-                <svg class="w-16 h-16 text-primary-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+            <div class="text-center py-12 glass-effect rounded-2xl shadow-md">
+                <div class="text-6xl mb-4">🌟</div>
                 <p class="text-gray-300 text-xl">No celebrities available at the moment. Please check back later.</p>
             </div>
             {% endif %}
         </div>
     </section>
     
+   <!-- Replace the Video Section in your home.html with this enhanced interactive demo -->
+
+<!-- Interactive Demo Section -->
+<section class="py-20 relative">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 animate-fade-in">
+            <span class="inline-block px-4 py-2 rounded-full glass-effect text-primary-300 font-semibold text-sm mb-4">
+                🎥 Interactive Demo
+            </span>
+            <h2 class="text-4xl md:text-5xl font-bold font-poppins text-white mb-4">See How It Works</h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">Experience the booking process step by step</p>
+        </div>
+        
+        <div class="max-w-6xl mx-auto">
+            <div class="glass-effect rounded-2xl p-8 hover-lift">
+                <!-- Demo Container -->
+                <div id="demo-container" class="relative bg-gradient-to-br from-dark-800 to-dark-700 rounded-xl overflow-hidden min-h-[500px]">
+                    <!-- Demo Controls -->
+                    <div class="absolute top-4 left-4 z-20 flex space-x-2">
+                        <button id="demo-play" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            Start Demo
+                        </button>
+                        <button id="demo-reset" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
+                            Reset
+                        </button>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="absolute top-4 right-4 z-20">
+                        <div class="bg-dark-600 rounded-full h-2 w-32">
+                            <div id="demo-progress" class="bg-gradient-to-r from-primary-500 to-accent-500 h-2 rounded-full transition-all duration-1000 w-0"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step Indicator -->
+                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
+                        <div class="flex space-x-2">
+                            <div class="step-dot w-3 h-3 rounded-full bg-primary-500 transition-all duration-300" data-step="0"></div>
+                            <div class="step-dot w-3 h-3 rounded-full bg-gray-600 transition-all duration-300" data-step="1"></div>
+                            <div class="step-dot w-3 h-3 rounded-full bg-gray-600 transition-all duration-300" data-step="2"></div>
+                            <div class="step-dot w-3 h-3 rounded-full bg-gray-600 transition-all duration-300" data-step="3"></div>
+                            <div class="step-dot w-3 h-3 rounded-full bg-gray-600 transition-all duration-300" data-step="4"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Demo Screens -->
+                    
+                    <!-- Screen 0: Welcome -->
+                    <div id="demo-screen-0" class="demo-screen absolute inset-0 flex items-center justify-center opacity-100 transition-all duration-1000">
+                        <div class="text-center">
+                            <div class="text-6xl mb-6 animate-bounce">🌟</div>
+                            <h3 class="text-3xl font-bold text-white mb-4 font-poppins">Welcome to Celebrity Meet & Greet</h3>
+                            <p class="text-xl text-gray-300 mb-8">Let's walk through the booking process</p>
+                            <div class="animate-pulse">
+                                <p class="text-primary-400">Click "Start Demo" to begin</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Screen 1: Browse Celebrities -->
+                    <div id="demo-screen-1" class="demo-screen absolute inset-0 opacity-0 transition-all duration-1000 p-8">
+                        <div class="h-full flex flex-col">
+                            <div class="text-center mb-8">
+                                <h3 class="text-2xl font-bold text-white mb-2 font-poppins">Step 1: Browse Celebrities</h3>
+                                <p class="text-gray-300">Explore our amazing roster of stars</p>
+                            </div>
+                            
+                            <!-- Mock Celebrity Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+                                <div class="celebrity-card bg-dark-600 rounded-lg p-4 opacity-0 transform translate-y-4 transition-all duration-500">
+                                    <div class="w-full h-32 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg mb-3 flex items-center justify-center">
+                                        <span class="text-2xl">🎬</span>
+                                    </div>
+                                    <h4 class="text-white font-semibold">Emma Stone</h4>
+                                    <p class="text-gray-400 text-sm">Actor</p>
+                                    <p class="text-primary-400 font-bold">$299/hour</p>
+                                </div>
+                                
+                                <div class="celebrity-card bg-dark-600 rounded-lg p-4 opacity-0 transform translate-y-4 transition-all duration-500">
+                                    <div class="w-full h-32 bg-gradient-to-br from-accent-500 to-secondary-500 rounded-lg mb-3 flex items-center justify-center">
+                                        <span class="text-2xl">🎵</span>
+                                    </div>
+                                    <h4 class="text-white font-semibold">Taylor Swift</h4>
+                                    <p class="text-gray-400 text-sm">Musician</p>
+                                    <p class="text-primary-400 font-bold">$599/hour</p>
+                                </div>
+                                
+                                <div class="celebrity-card bg-dark-600 rounded-lg p-4 opacity-0 transform translate-y-4 transition-all duration-500 ring-2 ring-primary-500">
+                                    <div class="w-full h-32 bg-gradient-to-br from-secondary-500 to-primary-500 rounded-lg mb-3 flex items-center justify-center">
+                                        <span class="text-2xl">🏆</span>
+                                    </div>
+                                    <h4 class="text-white font-semibold">Ryan Reynolds</h4>
+                                    <p class="text-gray-400 text-sm">Actor</p>
+                                    <p class="text-primary-400 font-bold">$399/hour</p>
+                                    <div class="mt-2">
+                                        <span class="bg-primary-500 text-white text-xs px-2 py-1 rounded">Selected</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-6">
+                                <div class="typing-text text-primary-400 font-semibold"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Screen 2: Select Date & Time -->
+                    <div id="demo-screen-2" class="demo-screen absolute inset-0 opacity-0 transition-all duration-1000 p-8">
+                        <div class="h-full flex flex-col">
+                            <div class="text-center mb-8">
+                                <h3 class="text-2xl font-bold text-white mb-2 font-poppins">Step 2: Select Date & Time</h3>
+                                <p class="text-gray-300">Choose your preferred meeting time</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1">
+                                <!-- Calendar -->
+                                <div class="calendar-container">
+                                    <h4 class="text-white font-semibold mb-4">📅 Select Date</h4>
+                                    <div class="bg-dark-600 rounded-lg p-4">
+                                        <div class="grid grid-cols-7 gap-2 text-center">
+                                            <div class="text-gray-400 text-sm py-2">Sun</div>
+                                            <div class="text-gray-400 text-sm py-2">Mon</div>
+                                            <div class="text-gray-400 text-sm py-2">Tue</div>
+                                            <div class="text-gray-400 text-sm py-2">Wed</div>
+                                            <div class="text-gray-400 text-sm py-2">Thu</div>
+                                            <div class="text-gray-400 text-sm py-2">Fri</div>
+                                            <div class="text-gray-400 text-sm py-2">Sat</div>
+                                            
+                                            <!-- Calendar dates -->
+                                            <div class="calendar-date text-gray-500 py-2 text-sm">28</div>
+                                            <div class="calendar-date text-gray-500 py-2 text-sm">29</div>
+                                            <div class="calendar-date text-gray-500 py-2 text-sm">30</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">1</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">2</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">3</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">4</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">5</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">6</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">7</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">8</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">9</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">10</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">11</div>
+                                            <div id="selected-date" class="calendar-date bg-primary-500 text-white py-2 text-sm rounded cursor-pointer">12</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">13</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">14</div>
+                                            <div class="calendar-date text-white py-2 text-sm hover:bg-primary-600 rounded cursor-pointer transition-colors">15</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Time Slots -->
+                                <div class="time-container">
+                                    <h4 class="text-white font-semibold mb-4">🕐 Select Time</h4>
+                                    <div class="space-y-2">
+                                        <div class="time-slot bg-dark-600 hover:bg-primary-600 text-white p-3 rounded-lg cursor-pointer transition-colors">
+                                            10:00 AM - 11:00 AM
+                                        </div>
+                                        <div class="time-slot bg-dark-600 hover:bg-primary-600 text-white p-3 rounded-lg cursor-pointer transition-colors">
+                                            2:00 PM - 3:00 PM
+                                        </div>
+                                        <div id="selected-time" class="time-slot bg-primary-500 text-white p-3 rounded-lg cursor-pointer">
+                                            4:00 PM - 5:00 PM ✓
+                                        </div>
+                                        <div class="time-slot bg-dark-600 hover:bg-primary-600 text-white p-3 rounded-lg cursor-pointer transition-colors">
+                                            6:00 PM - 7:00 PM
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-6">
+                                <div class="typing-text text-primary-400 font-semibold"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Screen 3: Payment -->
+                    <div id="demo-screen-3" class="demo-screen absolute inset-0 opacity-0 transition-all duration-1000 p-8">
+                        <div class="h-full flex flex-col">
+                            <div class="text-center mb-8">
+                                <h3 class="text-2xl font-bold text-white mb-2 font-poppins">Step 3: Secure Payment</h3>
+                                <p class="text-gray-300">Complete your booking with secure payment</p>
+                            </div>
+                            
+                            <div class="max-w-md mx-auto w-full">
+                                <!-- Booking Summary -->
+                                <div class="bg-dark-600 rounded-lg p-6 mb-6">
+                                    <h4 class="text-white font-semibold mb-4">📋 Booking Summary</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Celebrity:</span>
+                                            <span class="text-white">Ryan Reynolds</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Date:</span>
+                                            <span class="text-white">Dec 12, 2024</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Time:</span>
+                                            <span class="text-white">4:00 PM - 5:00 PM</span>
+                                        </div>
+                                        <div class="border-t border-gray-500 pt-2 mt-2">
+                                            <div class="flex justify-between font-semibold">
+                                                <span class="text-white">Total:</span>
+                                                <span class="text-primary-400">$399</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Payment Form -->
+                                <div class="bg-dark-600 rounded-lg p-6">
+                                    <h4 class="text-white font-semibold mb-4">💳 Payment Details</h4>
+                                    <div class="space-y-4">
+                                        <div class="payment-field">
+                                            <label class="block text-gray-400 text-sm mb-1">Card Number</label>
+                                            <div class="bg-dark-700 border border-gray-500 rounded-lg p-3 text-white">
+                                                <span class="typing-card">•••• •••• •••• 1234</span>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="payment-field">
+                                                <label class="block text-gray-400 text-sm mb-1">Expiry</label>
+                                                <div class="bg-dark-700 border border-gray-500 rounded-lg p-3 text-white">
+                                                    12/26
+                                                </div>
+                                            </div>
+                                            <div class="payment-field">
+                                                <label class="block text-gray-400 text-sm mb-1">CVV</label>
+                                                <div class="bg-dark-700 border border-gray-500 rounded-lg p-3 text-white">
+                                                    •••
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="w-full bg-gradient-to-r from-primary-500 to-accent-500 text-white py-3 rounded-lg font-semibold hover:from-primary-600 hover:to-accent-600 transition-all">
+                                            🔒 Complete Payment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-6">
+                                <div class="typing-text text-primary-400 font-semibold"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Screen 4: Confirmation -->
+                    <div id="demo-screen-4" class="demo-screen absolute inset-0 opacity-0 transition-all duration-1000 p-8">
+                        <div class="h-full flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="success-animation mb-6">
+                                    <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <h3 class="text-3xl font-bold text-white mb-4 font-poppins">🎉 Booking Confirmed!</h3>
+                                <p class="text-xl text-gray-300 mb-6">Your meet & greet with Ryan Reynolds is all set!</p>
+                                
+                                <div class="bg-dark-600 rounded-lg p-6 max-w-md mx-auto mb-6">
+                                    <h4 class="text-white font-semibold mb-4">📧 Confirmation Details</h4>
+                                    <div class="space-y-2 text-sm text-left">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Booking ID:</span>
+                                            <span class="text-white">#CMG-2024-001</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Email sent to:</span>
+                                            <span class="text-white">you@email.com</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Meeting location:</span>
+                                            <span class="text-white">Will be provided</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <p class="text-gray-300">What happens next:</p>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+                                            <span class="text-gray-300">Confirmation email sent</span>
+                                        </div>
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <span class="w-2 h-2 bg-accent-500 rounded-full"></span>
+                                            <span class="text-gray-300">Meeting details will follow</span>
+                                        </div>
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <span class="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                                            <span class="text-gray-300">Enjoy your celebrity experience!</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Demo-specific styles */
+.demo-screen {
+    transition: opacity 1s ease-in-out, transform 0.5s ease;
+}
+
+.demo-screen.active {
+    opacity: 1 !important;
+    transform: translateX(0);
+}
+
+.demo-screen.slide-out-left {
+    transform: translateX(-100%);
+}
+
+.demo-screen.slide-in-right {
+    transform: translateX(100%);
+}
+
+.celebrity-card {
+    transition: all 0.5s ease;
+}
+
+.celebrity-card.animate-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.calendar-date:hover {
+    background-color: rgba(59, 130, 246, 0.6);
+}
+
+.time-slot:hover {
+    background-color: rgba(59, 130, 246, 0.6);
+}
+
+.payment-field {
+    animation: slideInUp 0.5s ease forwards;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.typing-text {
+    min-height: 1.5rem;
+    border-right: 2px solid #3b82f6;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { border-color: #3b82f6; }
+    51%, 100% { border-color: transparent; }
+}
+
+.success-animation {
+    animation: successPulse 2s ease-in-out;
+}
+
+@keyframes successPulse {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.step-dot.active {
+    background-color: #3b82f6 !important;
+    transform: scale(1.2);
+}
+</style>
+
+<script>
+// Interactive Demo Script
+document.addEventListener('DOMContentLoaded', function() {
+    const demoContainer = document.getElementById('demo-container');
+    const playButton = document.getElementById('demo-play');
+    const resetButton = document.getElementById('demo-reset');
+    const progressBar = document.getElementById('demo-progress');
+    const stepDots = document.querySelectorAll('.step-dot');
+    
+    let currentStep = 0;
+    let isPlaying = false;
+    let demoInterval;
+    
+    const steps = [
+        {
+            duration: 3000,
+            text: "Welcome! Let's start your celebrity booking journey...",
+            action: () => {}
+        },
+        {
+            duration: 4000,
+            text: "Browse through our amazing celebrity roster...",
+            action: () => {
+                // Animate celebrity cards
+                const cards = document.querySelectorAll('.celebrity-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-in');
+                    }, index * 200);
+                });
+            }
+        },
+        {
+            duration: 4000,
+            text: "Select your preferred date and time...",
+            action: () => {
+                // Animate calendar selection
+                setTimeout(() => {
+                    document.getElementById('selected-date').style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        document.getElementById('selected-date').style.transform = 'scale(1)';
+                    }, 300);
+                }, 1000);
+                
+                setTimeout(() => {
+                    document.getElementById('selected-time').style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        document.getElementById('selected-time').style.transform = 'scale(1)';
+                    }, 300);
+                }, 2000);
+            }
+        },
+        {
+            duration: 4000,
+            text: "Complete your secure payment...",
+            action: () => {
+                // Animate payment form
+                const fields = document.querySelectorAll('.payment-field');
+                fields.forEach((field, index) => {
+                    field.style.animationDelay = `${index * 0.2}s`;
+                });
+                
+                // Animate card number typing
+                setTimeout(() => {
+                    const cardElement = document.querySelector('.typing-card');
+                    if (cardElement) {
+                        let cardText = '';
+                        const fullCard = '4532 1234 5678 9012';
+                        let i = 0;
+                        const typeCard = setInterval(() => {
+                            if (i < fullCard.length) {
+                                cardText += fullCard[i];
+                                cardElement.textContent = cardText;
+                                i++;
+                            } else {
+                                clearInterval(typeCard);
+                            }
+                        }, 100);
+                    }
+                }, 1000);
+            }
+        },
+        {
+            duration: 5000,
+            text: "Congratulations! Your booking is confirmed!",
+            action: () => {
+                // Trigger success animation
+                const successAnimation = document.querySelector('.success-animation');
+                if (successAnimation) {
+                    successAnimation.style.animation = 'successPulse 2s ease-in-out';
+                }
+            }
+        }
+    ];
+    
+    function typeText(element, text, speed = 50) {
+        element.textContent = '';
+        let i = 0;
+        const typeInterval = setInterval(() => {
+            if (i < text.length) {
+                element.textContent += text[i];
+                i++;
+            } else {
+                clearInterval(typeInterval);
+            }
+        }, speed);
+    }
+    
+    function updateStepIndicator(step) {
+        stepDots.forEach((dot, index) => {
+            if (index <= step) {
+                dot.classList.add('active');
+                dot.style.backgroundColor = '#3b82f6';
+            } else {
+                dot.classList.remove('active');
+                dot.style.backgroundColor = '#6b7280';
+            }
+        });
+    }
+    
+    function showStep(stepIndex) {
+        // Hide all screens
+        document.querySelectorAll('.demo-screen').forEach(screen => {
+            screen.style.opacity = '0';
+        });
+        
+        // Show current screen
+        setTimeout(() => {
+            const currentScreen = document.getElementById(`demo-screen-${stepIndex}`);
+            if (currentScreen) {
+                currentScreen.style.opacity = '1';
+                
+                // Execute step action
+                if (steps[stepIndex] && steps[stepIndex].action) {
+                    steps[stepIndex].action();
+                }
+                
+                // Type step text
+                const typingElement = currentScreen.querySelector('.typing-text');
+                if (typingElement && steps[stepIndex]) {
+                    setTimeout(() => {
+                        typeText(typingElement, steps[stepIndex].text);
+                    }, 500);
+                }
+            }
+        }, 300);
+        
+        // Update progress bar
+        const progress = ((stepIndex + 1) / steps.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        // Update step indicator
+        updateStepIndicator(stepIndex);
+    }
+    
+    function startDemo() {
+        if (isPlaying) return;
+        
+        isPlaying = true;
+        playButton.textContent = 'Playing...';
+        playButton.disabled = true;
+        
+        currentStep = 0;
+        showStep(currentStep);
+        
+        demoInterval = setInterval(() => {
+            currentStep++;
+            if (currentStep < steps.length) {
+                showStep(currentStep);
+            } else {
+                // Demo finished
+                clearInterval(demoInterval);
+                isPlaying = false;
+                playButton.textContent = 'Replay Demo';
+                playButton.disabled = false;
+            }
+        }, steps[currentStep]?.duration || 3000);
+    }
+    
+    function resetDemo() {
+        clearInterval(demoInterval);
+        isPlaying = false;
+        currentStep = 0;
+        
+        playButton.textContent = 'Start Demo';
+        playButton.disabled = false;
+        
+        progressBar.style.width = '0%';
+        updateStepIndicator(-1);
+        
+        // Reset all animations
+        document.querySelectorAll('.celebrity-card').forEach(card => {
+            card.classList.remove('animate-in');
+        });
+        
+        document.querySelectorAll('.typing-text').forEach(element => {
+            element.textContent = '';
+        });
+        
+        const cardElement = document.querySelector('.typing-card');
+        if (cardElement) {
+            cardElement.textContent = '•••• •••• •••• 1234';
+        }
+        
+        showStep(0);
+    }
+    
+    // Event listeners
+    playButton.addEventListener('click', startDemo);
+    resetButton.addEventListener('click', resetDemo);
+    
+    // Initialize
+    showStep(0);
+    updateStepIndicator(-1);
+    stepDots[0].style.backgroundColor = '#3b82f6';
+});
+</script>
+    
     <!-- Testimonials Section -->
-    <section class="py-20 relative bg-dark-800">
+    <section class="py-20 relative">
         <!-- Background decorative elements -->
-        <div class="decorative-blob top-0 right-0 w-96 h-96 bg-primary-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div class="decorative-blob bottom-0 left-0 w-96 h-96 bg-accent-900 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="decorative-blob top-0 right-0 w-96 h-96 bg-primary-600 rounded-full"></div>
+        <div class="decorative-blob bottom-0 left-0 w-96 h-96 bg-accent-600 rounded-full"></div>
         
         <div class="container mx-auto px-6 relative">
             <div class="text-center mb-16 animate-fade-in">
-                <span class="inline-block px-4 py-2 rounded-full bg-primary-900 text-primary-300 font-semibold text-sm mb-4">Testimonials</span>
-                <h2 class="text-4xl font-bold text-white mb-4">What Our Clients Say</h2>
+                <span class="inline-block px-4 py-2 rounded-full glass-effect text-primary-300 font-semibold text-sm mb-4">
+                    💬 Testimonials
+                </span>
+                <h2 class="text-4xl md:text-5xl font-bold font-poppins text-white mb-4">What Our Clients Say</h2>
                 <p class="text-xl text-gray-300 max-w-3xl mx-auto">Hear from people who have experienced our service</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-dark-700 p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-100">
+                <div class="glass-effect p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-500 rounded-bl-full opacity-20"></div>
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-primary-900 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-primary-400 font-bold text-xl">S</span>
+                        <div class="w-14 h-14 gradient-bg rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold text-xl">S</span>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-lg text-white">Sarah Johnson</h4>
+                            <h4 class="font-semibold text-lg text-white font-poppins">Sarah Johnson</h4>
                             <div class="text-yellow-400 flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                {% for i in "12345" %}
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                 </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 mb-4 italic">"Meeting my favorite actor was a dream come true! The booking process was smooth, and the experience was unforgettable. I'll cherish these memories forever."</p>
-                    <div class="pt-4 border-t border-dark-600">
-                        <span class="text-sm text-gray-400">Los Angeles, CA</span>
+                    <p class="text-gray-300 mb-4 italic leading-relaxed">
+                        "Meeting my favorite actor was a dream come true! The booking process was smooth, and the experience was unforgettable. I'll cherish these memories forever."
+                    </p>
+                    <div class="pt-4 border-t border-gray-600">
+                        <span class="text-sm text-gray-400">📍 Los Angeles, CA</span>
                     </div>
                 </div>
                 
-                <div class="bg-dark-700 p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-300">
+                <div class="glass-effect p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-accent-500 to-secondary-500 rounded-bl-full opacity-20"></div>
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-primary-900 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-primary-400 font-bold text-xl">M</span>
+                        <div class="w-14 h-14 gradient-bg rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold text-xl">M</span>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-lg text-white">Michael Thompson</h4>
+                            <h4 class="font-semibold text-lg text-white font-poppins">Michael Thompson</h4>
                             <div class="text-yellow-400 flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                {% for i in "12345" %}
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                 </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 mb-4 italic">"I booked a session for my daughter's birthday, and it was the best gift ever! The celebrity was so kind and made her day special. Worth every penny!"</p>
-                    <div class="pt-4 border-t border-dark-600">
-                        <span class="text-sm text-gray-400">New York, NY</span>
+                    <p class="text-gray-300 mb-4 italic leading-relaxed">
+                        "I booked a session for my daughter's birthday, and it was the best gift ever! The celebrity was so kind and made her day special. Worth every penny!"
+                    </p>
+                    <div class="pt-4 border-t border-gray-600">
+                        <span class="text-sm text-gray-400">📍 New York, NY</span>
                     </div>
                 </div>
                 
-                <div class="bg-dark-700 p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-500">
+                <div class="glass-effect p-8 rounded-2xl shadow-xl hover-lift animate-fade-in delay-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-secondary-500 to-primary-500 rounded-bl-full opacity-20"></div>
                     <div class="flex items-center mb-6">
-                        <div class="w-14 h-14 bg-primary-900 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-primary-400 font-bold text-xl">J</span>
+                        <div class="w-14 h-14 gradient-bg rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold text-xl">J</span>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-lg text-white">Jennifer Davis</h4>
+                            <h4 class="font-semibold text-lg text-white font-poppins">Jennifer Davis</h4>
                             <div class="text-yellow-400 flex">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                {% for i in "12345" %}
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                 </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-300 mb-4 italic">"Professional service from start to finish. The confirmation emails were prompt, and the celebrity was punctual and friendly. Highly recommend!"</p>
-                    <div class="pt-4 border-t border-dark-600">
-                        <span class="text-sm text-gray-400">Chicago, IL</span>
+                    <p class="text-gray-300 mb-4 italic leading-relaxed">
+                        "Professional service from start to finish. The confirmation emails were prompt, and the celebrity was punctual and friendly. Highly recommend!"
+                    </p>
+                    <div class="pt-4 border-t border-gray-600">
+                        <span class="text-sm text-gray-400">📍 Chicago, IL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Advertisement Banner 3 -->
+    <section class="py-8">
+        <div class="container mx-auto px-6">
+            <div class="ad-banner rounded-2xl p-8 md:p-12 overflow-hidden relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-4">
+                        <h3 class="text-2xl md:text-3xl font-bold text-white font-poppins">
+                            🏆 Sports Celebrity Experiences
+                        </h3>
+                        <p class="text-gray-300 text-lg">
+                            Meet legendary athletes and sports personalities. From championship winners to Olympic medalists, book exclusive sessions with sports icons.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-secondary-400 hover:text-secondary-300 font-semibold transition-colors">
+                            Book Now 
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <img src="https://emikonokumo.wordpress.com/wp-content/uploads/2016/03/fichier_000-7.jpeg?w=663" 
+                             alt="Sports Celebrity" 
+                             class="rounded-xl shadow-lg hover-scale">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Newsletter Section -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="glass-effect rounded-3xl p-12 text-center relative overflow-hidden">
+                <div class="absolute inset-0 gradient-bg opacity-10"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-bold font-poppins text-white mb-4">
+                        📧 Stay Updated
+                    </h2>
+                    <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                        Get notified about new celebrity additions, exclusive events, and special offers.
+                    </p>
+                    <div class="max-w-md mx-auto flex gap-4">
+                        <input type="email" placeholder="Enter your email" 
+                               class="flex-1 px-6 py-3 rounded-full bg-dark-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 transition-colors">
+                        <button class="gradient-bg text-white px-8 py-3 rounded-full font-semibold hover-scale transition-transform">
+                            Subscribe
+                        </button>
                     </div>
                 </div>
             </div>
@@ -363,31 +1141,54 @@
     </section>
     
     <!-- CTA Section -->
-    <section class="py-20 relative overflow-hidden bg-gradient-to-r from-primary-600 to-accent-600">
-        <div class="absolute inset-0 opacity-10">
-            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#grid)" />
-            </svg>
-            <defs>
-                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5" />
-                </pattern>
-            </defs>
+    <section class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 gradient-bg opacity-90"></div>
+        <div class="absolute inset-0">
+            <div class="w-full h-full opacity-10">
+                <div class="absolute top-0 left-0 w-32 h-32 border border-white rounded-full animate-pulse"></div>
+                <div class="absolute top-1/4 right-0 w-24 h-24 border border-white rounded-full animate-pulse delay-200"></div>
+                <div class="absolute bottom-0 left-1/4 w-40 h-40 border border-white rounded-full animate-pulse delay-400"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-16 h-16 border border-white rounded-full animate-pulse delay-600"></div>
+            </div>
         </div>
         
-        <div class="container mx-auto px-6 py-12 relative">
-            <div class="max-w-3xl mx-auto text-center text-white">
-                <h2 class="text-4xl font-bold mb-6 animate-fade-in">Ready to Meet Your Favorite Celebrity?</h2>
-                <p class="text-xl text-primary-100 mb-10 animate-fade-in delay-200">Book a session today and create memories that will last a lifetime.</p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in delay-400">
-                    <a href="#celebrities" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-primary-200">
-                        <span class="relative rounded-full bg-white px-8 py-3.5 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-primary-700 font-semibold text-lg group-hover:text-white">
-                            Browse Celebrities
+        <div class="container mx-auto px-6 py-12 relative z-10">
+            <div class="max-w-4xl mx-auto text-center text-white">
+                <h2 class="text-4xl md:text-6xl font-bold font-poppins mb-6 animate-fade-in">
+                    Ready to Meet Your Favorite Celebrity?
+                </h2>
+                <p class="text-xl md:text-2xl text-blue-100 mb-10 animate-fade-in delay-200 leading-relaxed">
+                    Book a session today and create memories that will last a lifetime. Join thousands of satisfied customers who have experienced the magic.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in delay-400">
+                    <a href="#celebrities" class="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-white p-0.5 text-sm font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-200 hover-scale">
+                        <span class="relative rounded-full bg-white px-8 py-4 transition-all duration-300 ease-in-out group-hover:bg-opacity-0 text-primary-700 font-bold text-lg group-hover:text-white">
+                            🌟 Browse Celebrities
                         </span>
                     </a>
-                    <a href="{% url 'contact' %}" class="inline-flex items-center justify-center px-8 py-3.5 border-2 border-white text-white hover:bg-white hover:text-primary-600 rounded-full font-semibold text-lg transition-colors">
-                        Contact Us
+                    <a href="{% url 'contact' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-primary-600 rounded-full font-bold text-lg transition-all hover-scale">
+                        💬 Contact Us
                     </a>
+                </div>
+                
+                <!-- Trust indicators -->
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 opacity-80">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🔒</div>
+                        <div class="text-sm">Secure Payments</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">⚡</div>
+                        <div class="text-sm">Instant Booking</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🎯</div>
+                        <div class="text-sm">100% Verified</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🏆</div>
+                        <div class="text-sm">Premium Service</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -399,7 +1200,7 @@
 <script>
     // Page loader
     window.addEventListener('load', function() {
-        const loader = document.getElementById('page-loader');
+        const loader = document.getElementById('site-loader');
         setTimeout(function() {
             loader.style.opacity = '0';
             loader.style.transition = 'opacity 0.5s ease';
@@ -409,7 +1210,21 @@
         }, 1000);
     });
     
-    // Intersection Observer for animations
+    // Stats counter animation
+    function animateCounter(element, target) {
+        let current = 0;
+        const increment = target / 100;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current).toLocaleString();
+        }, 20);
+    }
+    
+    // Intersection Observer for animations and counters
     document.addEventListener('DOMContentLoaded', function() {
         const observerOptions = {
             root: null,
@@ -421,22 +1236,33 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    
+                    // Animate counters
+                    if (entry.target.classList.contains('stat-number')) {
+                        const target = parseInt(entry.target.getAttribute('data-count'));
+                        animateCounter(entry.target, target);
+                    }
+                    
                     observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
         
-        const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-left, .animate-slide-right');
+        const animatedElements = document.querySelectorAll('.animate-fade-in, .animate-slide-left, .animate-slide-right, .stat-number');
         animatedElements.forEach(el => {
-            el.style.opacity = '0';
-            el.classList.add('transition-opacity', 'duration-1000');
+            if (!el.classList.contains('stat-number')) {
+                el.style.opacity = '0';
+                el.classList.add('transition-opacity', 'duration-1000');
+            }
             observer.observe(el);
         });
         
         // Add visible class when element is in viewport
         document.addEventListener('scroll', function() {
             document.querySelectorAll('.visible').forEach(el => {
-                el.style.opacity = '1';
+                if (!el.classList.contains('stat-number')) {
+                    el.style.opacity = '1';
+                }
             });
         });
     });
@@ -455,6 +1281,39 @@
                     behavior: 'smooth'
                 });
             }
+        });
+    });
+    
+    // Newsletter subscription
+    document.querySelector('button[type="button"]')?.addEventListener('click', function() {
+        const email = this.previousElementSibling.value;
+        if (email) {
+            // Add your newsletter subscription logic here
+            alert('Thank you for subscribing! 🎉');
+            this.previousElementSibling.value = '';
+        }
+    });
+    
+    // Add parallax effect to decorative blobs
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelectorAll('.decorative-blob');
+        const speed = 0.5;
+        
+        parallax.forEach(blob => {
+            const yPos = -(scrolled * speed);
+            blob.style.transform = `translateY(${yPos}px)`;
+        });
+    });
+    
+    // Add hover effects to cards
+    document.querySelectorAll('.hover-lift').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
         });
     });
 </script>
